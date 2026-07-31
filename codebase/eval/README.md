@@ -57,6 +57,12 @@ Runner mặc định gọi `http://localhost:3000/api/resolve`. Có thể đổi
 node eval/run-eval.mjs --endpoint=http://127.0.0.1:3001/api/resolve --label=live-cp3
 ```
 
+Mặc định runner xử lý theo batch 3 request để rút ngắn thời gian nhưng không gây burst quá lớn. Nếu API đang rate limit, giảm xuống một request:
+
+```bash
+node eval/run-eval.mjs --label=live-cp3 --concurrency=1
+```
+
 Mỗi lần chạy tạo JSON trong `eval/runs/`, gồm kết quả cả pass lẫn fail để phục vụ error analysis. Chỉ report có `observed_modes: ["live"]` mới là bằng chứng cho embedding và resolver thật.
 
 ## Review định tính

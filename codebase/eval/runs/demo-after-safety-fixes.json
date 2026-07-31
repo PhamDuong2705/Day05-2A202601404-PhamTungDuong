@@ -1,8 +1,9 @@
 {
   "run": {
     "label": "demo-after-safety-fixes",
-    "created_at": "2026-07-31T01:09:53.647Z",
+    "created_at": "2026-07-31T02:15:01.937Z",
     "endpoint": "http://localhost:3000/api/resolve",
+    "concurrency": 3,
     "golden_set": "discord-question-resolver-cp3-golden-v1",
     "golden_version": 1,
     "observed_modes": [
@@ -92,7 +93,7 @@
         "confidence": 0.8230019232961255
       },
       "request_error": null,
-      "latency_ms": 150
+      "latency_ms": 119
     },
     {
       "case_id": "N02",
@@ -133,7 +134,7 @@
         "confidence": 0.680556167081694
       },
       "request_error": null,
-      "latency_ms": 35
+      "latency_ms": 90
     },
     {
       "case_id": "N03",
@@ -174,7 +175,7 @@
         "confidence": 0.7681818181818182
       },
       "request_error": null,
-      "latency_ms": 35
+      "latency_ms": 87
     },
     {
       "case_id": "N04",
@@ -215,7 +216,7 @@
         "confidence": 0.8687178946793119
       },
       "request_error": null,
-      "latency_ms": 34
+      "latency_ms": 41
     },
     {
       "case_id": "N05",
@@ -256,7 +257,7 @@
         "confidence": 0.7416059217599021
       },
       "request_error": null,
-      "latency_ms": 32
+      "latency_ms": 45
     },
     {
       "case_id": "N06",
@@ -297,7 +298,7 @@
         "confidence": 0.6325741858350553
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 41
     },
     {
       "case_id": "N07",
@@ -338,7 +339,7 @@
         "confidence": 0.7239983121755955
       },
       "request_error": null,
-      "latency_ms": 30
+      "latency_ms": 42
     },
     {
       "case_id": "N08",
@@ -379,7 +380,7 @@
         "confidence": 0.7837119062359573
       },
       "request_error": null,
-      "latency_ms": 27
+      "latency_ms": 43
     },
     {
       "case_id": "N09",
@@ -420,7 +421,7 @@
         "confidence": 0.7532036572769469
       },
       "request_error": null,
-      "latency_ms": 31
+      "latency_ms": 46
     },
     {
       "case_id": "N10",
@@ -461,7 +462,7 @@
         "confidence": 0.6214985851425089
       },
       "request_error": null,
-      "latency_ms": 33
+      "latency_ms": 35
     },
     {
       "case_id": "S01",
@@ -502,7 +503,7 @@
         "confidence": 0.9
       },
       "request_error": null,
-      "latency_ms": 29
+      "latency_ms": 35
     },
     {
       "case_id": "S02",
@@ -543,7 +544,7 @@
         "confidence": 0.774442842261525
       },
       "request_error": null,
-      "latency_ms": 29
+      "latency_ms": 37
     },
     {
       "case_id": "A01",
@@ -578,7 +579,7 @@
         "confidence": 0.45
       },
       "request_error": null,
-      "latency_ms": 31
+      "latency_ms": 38
     },
     {
       "case_id": "A02",
@@ -613,7 +614,7 @@
         "confidence": 0.45
       },
       "request_error": null,
-      "latency_ms": 26
+      "latency_ms": 35
     },
     {
       "case_id": "O01",
@@ -650,7 +651,7 @@
         "confidence": 0.92
       },
       "request_error": null,
-      "latency_ms": 30
+      "latency_ms": 36
     },
     {
       "case_id": "O02",
@@ -687,7 +688,7 @@
         "confidence": 0.92
       },
       "request_error": null,
-      "latency_ms": 27
+      "latency_ms": 32
     },
     {
       "case_id": "D01",
@@ -724,7 +725,7 @@
         "confidence": 0.92
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 34
     },
     {
       "case_id": "D02",
@@ -765,7 +766,7 @@
         "confidence": 0.8582482904638631
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 35
     },
     {
       "case_id": "R01",
@@ -802,7 +803,7 @@
         "confidence": 0.42
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 24
     },
     {
       "case_id": "R02",
@@ -839,7 +840,7 @@
         "confidence": 0.42
       },
       "request_error": null,
-      "latency_ms": 27
+      "latency_ms": 24
     },
     {
       "case_id": "R03",
@@ -876,7 +877,7 @@
         "confidence": 0.92
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 25
     },
     {
       "case_id": "R04",
@@ -911,7 +912,7 @@
         "confidence": 0.4
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 25
     },
     {
       "case_id": "R05",
@@ -946,7 +947,7 @@
         "confidence": 0.4
       },
       "request_error": null,
-      "latency_ms": 28
+      "latency_ms": 26
     },
     {
       "case_id": "R06",
@@ -981,7 +982,7 @@
         "confidence": 0.42
       },
       "request_error": null,
-      "latency_ms": 29
+      "latency_ms": 28
     },
     {
       "case_id": "D03",
@@ -1022,7 +1023,7 @@
         "confidence": 0.8660251471689218
       },
       "request_error": null,
-      "latency_ms": 31
+      "latency_ms": 24
     },
     {
       "case_id": "A03",
@@ -1057,7 +1058,7 @@
         "confidence": 0.45
       },
       "request_error": null,
-      "latency_ms": 30
+      "latency_ms": 25
     }
   ]
 }

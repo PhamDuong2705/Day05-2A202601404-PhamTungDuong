@@ -17,6 +17,10 @@ const endpoint = argument(
   process.env.RESOLVER_ENDPOINT ?? "http://localhost:3000/api/resolve",
 );
 const label = argument("label", "manual");
+const concurrency = Math.max(
+  1,
+  Math.min(5, Number.parseInt(argument("concurrency", "3"), 10) || 3),
+);
 const outputName = argument(
   "output",
   `${label}-${new Date().toISOString().replace(/[:.]/g, "-")}.json`,
@@ -102,13 +106,16 @@ async function evaluateCase(testCase) {
 }
 
 const results = [];
-for (const testCase of golden.cases) {
-  const result = await evaluateCase(testCase);
-  results.push(result);
-  const mark = result.pass ? "PASS" : "FAIL";
-  console.log(
-    `${mark} ${testCase.case_id} expected=${testCase.expected_status} actual=${result.actual?.status ?? "request_error"}`,
-  );
+for (let index = 0; index < golden.cases.length; index += concurrency) {
+  const batch = golden.cases.slice(index, index + concurrency);
+  const batchResults = await Promise.all(batch.map(evaluateCase));
+  for (const result of batchResults) {
+    results.push(result);
+    const mark = result.pass ? "PASS" : "FAIL";
+    console.log(
+      `${mark} ${result.case_id} expected=${result.expected_status} actual=${result.actual?.status ?? "request_error"}`,
+    );
+  }
 }
 
 const groupSummary = Object.fromEntries(
@@ -150,6 +157,7 @@ const report = {
     label,
     created_at: new Date().toISOString(),
     endpoint,
+    concurrency,
     golden_set: golden.name,
     golden_version: golden.version,
     observed_modes: [...new Set(results.map((item) => item.actual?.trace_mode))],
