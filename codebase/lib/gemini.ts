@@ -5,6 +5,8 @@ export const DEFAULT_EMBEDDING_MODEL =
 export const DEFAULT_RESOLVER_MODEL =
   process.env.GEMINI_RESOLVER_MODEL ?? "gemini-3.1-flash-lite";
 
+const MAX_EMBEDDING_REQUESTS_PER_BATCH = 100;
+
 type EmbeddingResponse = {
   embedding?: { values?: number[] };
   embeddings?: Array<{ values?: number[] }>;
@@ -106,36 +108,52 @@ export async function embedMany({
   documents: Array<{ text: string; title: string }>;
   model?: string;
 }) {
-  const response = await fetchGemini(
-    `${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:batchEmbedContents`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey,
-      },
-      body: JSON.stringify({
-        requests: documents.map((document) => ({
-          model: `models/${model}`,
-          content: { parts: [{ text: document.text }] },
-          taskType: "RETRIEVAL_DOCUMENT",
-          title: document.title,
-          outputDimensionality: 768,
-        })),
-      }),
-    },
-    "Embedding documents",
-    30_000,
-  );
-  const payload = (await response.json()) as EmbeddingResponse;
-  const vectors = payload.embeddings?.map((item) => item.values ?? []);
-  if (
-    !vectors ||
-    vectors.length !== documents.length ||
-    vectors.some((vector) => vector.length === 0)
+  const vectors: number[][] = [];
+
+  for (
+    let start = 0;
+    start < documents.length;
+    start += MAX_EMBEDDING_REQUESTS_PER_BATCH
   ) {
-    throw new Error("Batch embedding response is incomplete");
+    const batch = documents.slice(
+      start,
+      start + MAX_EMBEDDING_REQUESTS_PER_BATCH,
+    );
+    const response = await fetchGemini(
+      `${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:batchEmbedContents`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          requests: batch.map((document) => ({
+            model: `models/${model}`,
+            content: { parts: [{ text: document.text }] },
+            taskType: "RETRIEVAL_DOCUMENT",
+            title: document.title,
+            outputDimensionality: 768,
+          })),
+        }),
+      },
+      `Embedding documents batch ${Math.floor(start / MAX_EMBEDDING_REQUESTS_PER_BATCH) + 1}`,
+      30_000,
+    );
+    const payload = (await response.json()) as EmbeddingResponse;
+    const batchVectors = payload.embeddings?.map((item) => item.values ?? []);
+    if (
+      !batchVectors ||
+      batchVectors.length !== batch.length ||
+      batchVectors.some((vector) => vector.length === 0)
+    ) {
+      throw new Error(
+        `Embedding batch ${Math.floor(start / MAX_EMBEDDING_REQUESTS_PER_BATCH) + 1} response is incomplete`,
+      );
+    }
+    vectors.push(...batchVectors);
   }
+
   return vectors;
 }
 

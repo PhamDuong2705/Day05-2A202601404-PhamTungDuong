@@ -16,6 +16,16 @@ type FlowStatus =
   | "escalated"
   | "out_of_scope";
 
+type ChannelKey =
+  | "general"
+  | "questions"
+  | "shares"
+  | "lessons"
+  | "support"
+  | "technical";
+
+type AnswerFeedback = "helpful" | "incorrect" | null;
+
 type Source = {
   id: string;
   threadId: string;
@@ -63,7 +73,8 @@ type Question = {
   reactions?: string;
 };
 
-const indexedThreads = (corpus.threads as DiscussionThread[]).filter(
+const activeCorpusThreads = corpus.threads as DiscussionThread[];
+const indexedThreads = activeCorpusThreads.filter(
   (thread) => thread.scope === "learning",
 );
 
@@ -114,6 +125,88 @@ const flowSteps = [
 const delay = (ms: number) =>
   new Promise((resolve) => window.setTimeout(resolve, ms));
 
+const channelDetails: Record<
+  ChannelKey,
+  { label: string; heading: string; description: string }
+> = {
+  general: {
+    label: "-chung",
+    heading: "chung",
+    description: "Toàn bộ nội dung đang được index trong prototype",
+  },
+  questions: {
+    label: "-hỏi-đáp",
+    heading: "hỏi-bài-day-2",
+    description: "Hỏi đáp nội dung bài học · dùng /ask để gọi resolver",
+  },
+  shares: {
+    label: "-chia-sẻ",
+    heading: "chia-sẻ",
+    description: "Kinh nghiệm và tài nguyên do cộng đồng chia sẻ",
+  },
+  lessons: {
+    label: "-bài-học",
+    heading: "bài-học",
+    description: "Bài viết chuyên môn đã được đưa vào kho tìm kiếm",
+  },
+  support: {
+    label: "ta-support",
+    heading: "ta-support",
+    description: "Các câu hỏi chưa đủ căn cứ và cần người hỗ trợ",
+  },
+  technical: {
+    label: "lỗi-kỹ-thuật",
+    heading: "lỗi-kỹ-thuật",
+    description: "Môi trường, API, GitHub và lỗi công cụ học tập",
+  },
+};
+
+function normalizeForChannel(text: string) {
+  return text
+    .toLocaleLowerCase("vi")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+}
+
+function threadMatchesChannel(
+  thread: DiscussionThread,
+  channel: ChannelKey,
+) {
+  const isLesson = thread.thread_id.startsWith("BH-");
+  const isShare = thread.thread_id.startsWith("CS-");
+  const searchable = normalizeForChannel(
+    `${thread.channel} ${thread.topic} ${thread.messages
+      .map((message) => message.content)
+      .join(" ")}`,
+  );
+
+  if (channel === "general") return true;
+  if (channel === "shares") return isShare;
+  if (channel === "lessons") return isLesson;
+  if (channel === "support") return !thread.resolved;
+  if (channel === "technical") {
+    return /(loi-ky-thuat|technical|python|api|github|git |environment|claude|hook)/.test(
+      searchable,
+    );
+  }
+  return !isLesson && !isShare && thread.scope === "learning";
+}
+
+function channelForThread(thread: DiscussionThread): ChannelKey {
+  if (thread.thread_id.startsWith("BH-")) return "lessons";
+  if (thread.thread_id.startsWith("CS-")) return "shares";
+  if (!thread.resolved) return "support";
+  if (
+    /(loi-ky-thuat|technical)/.test(
+      normalizeForChannel(`${thread.channel} ${thread.topic}`),
+    )
+  ) {
+    return "technical";
+  }
+  return "questions";
+}
+
 export default function Home() {
   const [selectedQuestion, setSelectedQuestion] =
     useState<Question>(firstIndexedQuestion);
@@ -121,6 +214,16 @@ export default function Home() {
   const [status, setStatus] = useState<FlowStatus>("idle");
   const [activeStep, setActiveStep] = useState(-1);
   const [result, setResult] = useState<ResolverResult | null>(null);
+  const [submittedQuestion, setSubmittedQuestion] = useState(
+    firstIndexedQuestion.content,
+  );
+  const [activeChannel, setActiveChannel] =
+    useState<ChannelKey>("questions");
+  const [answerFeedback, setAnswerFeedback] =
+    useState<AnswerFeedback>(null);
+  const [copyStatus, setCopyStatus] = useState<
+    "idle" | "copied" | "error"
+  >("idle");
   const [scopeOpen, setScopeOpen] = useState(false);
   const [manualEscalation, setManualEscalation] = useState(false);
   const [error, setError] = useState("");
@@ -128,6 +231,25 @@ export default function Home() {
   const cleanQuestion = useMemo(
     () => query.replace(/^\/ask\s*/i, "").trim(),
     [query],
+  );
+  const visibleThreads = useMemo(
+    () =>
+      activeCorpusThreads.filter((thread) =>
+        threadMatchesChannel(thread, activeChannel),
+      ),
+    [activeChannel],
+  );
+  const channelCounts = useMemo(
+    () =>
+      Object.fromEntries(
+        (Object.keys(channelDetails) as ChannelKey[]).map((channel) => [
+          channel,
+          activeCorpusThreads.filter((thread) =>
+            threadMatchesChannel(thread, channel),
+          ).length,
+        ]),
+      ) as Record<ChannelKey, number>,
+    [],
   );
 
   useEffect(() => {
@@ -140,13 +262,40 @@ export default function Home() {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, []);
 
+  useEffect(() => {
+    const revealSourceFromHash = () => {
+      const messageId = decodeURIComponent(window.location.hash.slice(1));
+      if (!messageId) return;
+      const sourceThread = activeCorpusThreads.find((thread) =>
+        thread.messages.some((message) => message.message_id === messageId),
+      );
+      if (!sourceThread) return;
+      setActiveChannel(channelForThread(sourceThread));
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          document.getElementById(messageId)?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        });
+      });
+    };
+
+    revealSourceFromHash();
+    window.addEventListener("hashchange", revealSourceFromHash);
+    return () => window.removeEventListener("hashchange", revealSourceFromHash);
+  }, []);
+
   const chooseQuestion = (question: Question) => {
     if (status === "processing") return;
     setSelectedQuestion(question);
     setQuery(`/ask ${question.content}`);
+    setSubmittedQuestion(question.content);
     setStatus("idle");
     setActiveStep(-1);
     setResult(null);
+    setAnswerFeedback(null);
+    setCopyStatus("idle");
     setManualEscalation(false);
     setError("");
   };
@@ -158,7 +307,11 @@ export default function Home() {
     }
 
     setStatus("processing");
+    setSubmittedQuestion(questionText);
+    setQuery("");
     setResult(null);
+    setAnswerFeedback(null);
+    setCopyStatus("idle");
     setManualEscalation(false);
     setError("");
 
@@ -181,6 +334,7 @@ export default function Home() {
     } catch {
       setStatus("idle");
       setActiveStep(-1);
+      setQuery(`/ask ${questionText}`);
       setError("Chưa thể chạy resolver. Hãy thử lại.");
     }
   };
@@ -206,15 +360,28 @@ export default function Home() {
     setStatus("idle");
     setActiveStep(-1);
     setResult(null);
+    setAnswerFeedback(null);
+    setCopyStatus("idle");
     setManualEscalation(false);
   };
 
   const answerClarification = () => {
-    const currentQuestion = cleanQuestion;
     setStatus("idle");
     setActiveStep(-1);
     setResult(null);
-    setQuery(`/ask ${currentQuestion} — `);
+    setAnswerFeedback(null);
+    setCopyStatus("idle");
+    setQuery(`/ask ${submittedQuestion} — `);
+  };
+
+  const copyAnswer = async () => {
+    if (!result?.answer) return;
+    try {
+      await navigator.clipboard.writeText(result.answer);
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("error");
+    }
   };
 
   return (
@@ -248,16 +415,68 @@ export default function Home() {
 
         <nav aria-label="Kênh Discord">
           <p className="channel-group">KÊNH HỌC TẬP <span>+</span></p>
-          <button className="channel-row"><span>#</span> -chung</button>
-          <Link className="channel-row channel-active" href="/hoi-dap-day2">
-            <span>#</span> -hỏi-đáp
+          <button
+            className={`channel-row ${
+              activeChannel === "general" ? "channel-active" : ""
+            }`}
+            onClick={() => setActiveChannel("general")}
+            aria-pressed={activeChannel === "general"}
+          >
+            <span>#</span> {channelDetails.general.label}
+            <small>{channelCounts.general}</small>
+          </button>
+          <Link
+            className={`channel-row ${
+              activeChannel === "questions" ? "channel-active" : ""
+            }`}
+            href="/hoi-dap-day2"
+            aria-current={activeChannel === "questions" ? "page" : undefined}
+          >
+            <span>#</span> {channelDetails.questions.label}
+            <small>{channelCounts.questions}</small>
           </Link>
-          <button className="channel-row"><span>#</span> -chia-sẻ</button>
-          <button className="channel-row"><span>#</span> khoe-bài-làm</button>
+          <button
+            className={`channel-row ${
+              activeChannel === "shares" ? "channel-active" : ""
+            }`}
+            onClick={() => setActiveChannel("shares")}
+            aria-pressed={activeChannel === "shares"}
+          >
+            <span>#</span> {channelDetails.shares.label}
+            <small>{channelCounts.shares}</small>
+          </button>
+          <button
+            className={`channel-row ${
+              activeChannel === "lessons" ? "channel-active" : ""
+            }`}
+            onClick={() => setActiveChannel("lessons")}
+            aria-pressed={activeChannel === "lessons"}
+          >
+            <span>#</span> {channelDetails.lessons.label}
+            <small>{channelCounts.lessons}</small>
+          </button>
 
           <p className="channel-group channel-gap">HỖ TRỢ <span>+</span></p>
-          <button className="channel-row"><span>#</span> ta-support <b>3</b></button>
-          <button className="channel-row"><span>#</span> lỗi-kỹ-thuật</button>
+          <button
+            className={`channel-row ${
+              activeChannel === "support" ? "channel-active" : ""
+            }`}
+            onClick={() => setActiveChannel("support")}
+            aria-pressed={activeChannel === "support"}
+          >
+            <span>#</span> {channelDetails.support.label}
+            <b>{channelCounts.support}</b>
+          </button>
+          <button
+            className={`channel-row ${
+              activeChannel === "technical" ? "channel-active" : ""
+            }`}
+            onClick={() => setActiveChannel("technical")}
+            aria-pressed={activeChannel === "technical"}
+          >
+            <span>#</span> {channelDetails.technical.label}
+            <small>{channelCounts.technical}</small>
+          </button>
         </nav>
 
         <div className="prototype-note">
@@ -274,8 +493,8 @@ export default function Home() {
           <div className="channel-heading">
             <span>#</span>
             <div>
-              <strong>hỏi-bài-day-2</strong>
-              <p>Hỏi đáp nội dung bài học · dùng /ask để gọi resolver</p>
+              <strong>{channelDetails[activeChannel].heading}</strong>
+              <p>{channelDetails[activeChannel].description}</p>
             </div>
           </div>
           <div className="header-actions">
@@ -305,7 +524,15 @@ export default function Home() {
             </div>
           </article>
 
-          {indexedThreads.map((thread) => (
+          {visibleThreads.length === 0 && (
+            <div className="channel-empty">
+              <span>#</span>
+              <strong>Kênh này chưa có tin nhắn phù hợp</strong>
+              <p>Chọn một kênh khác để tiếp tục xem kho thảo luận.</p>
+            </div>
+          )}
+
+          {visibleThreads.map((thread) => (
             <section className="indexed-thread" key={thread.thread_id}>
               <div className="indexed-thread-divider">
                 <span>#{thread.channel}</span>
@@ -411,7 +638,11 @@ export default function Home() {
 
         <section className="selected-question-card">
           <p className="eyebrow">CÂU HỎI ĐANG XỬ LÝ</p>
-          <blockquote>{cleanQuestion || "Chưa có câu hỏi"}</blockquote>
+          <blockquote>
+            {status === "idle" && !result
+              ? cleanQuestion || selectedQuestion.content
+              : submittedQuestion}
+          </blockquote>
           <span>từ #{selectedQuestion.id.replace("q-", "")}</span>
         </section>
 
@@ -467,7 +698,10 @@ export default function Home() {
               Chọn một tin nhắn ở bên trái hoặc sửa lệnh <code>/ask</code>, rồi
               nhấn gửi để xem toàn bộ flow.
             </p>
-            <button onClick={() => void runResolver(cleanQuestion)}>
+            <button
+              onClick={() => void runResolver(cleanQuestion)}
+              disabled={!cleanQuestion}
+            >
               Chạy resolver <span>→</span>
             </button>
           </section>
@@ -517,7 +751,22 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="answer-block">
-                  <p className="eyebrow">CÂU TRẢ LỜI TỔNG HỢP</p>
+                  <div className="answer-heading">
+                    <p className="eyebrow">CÂU TRẢ LỜI TỔNG HỢP</p>
+                    <button
+                      className={`copy-answer ${
+                        copyStatus === "copied" ? "copy-success" : ""
+                      }`}
+                      onClick={() => void copyAnswer()}
+                      type="button"
+                    >
+                      {copyStatus === "copied"
+                        ? "✓ Đã sao chép"
+                        : copyStatus === "error"
+                          ? "Thử lại"
+                          : "⧉ Sao chép"}
+                    </button>
+                  </div>
                   <p>{result.answer}</p>
                 </div>
                 <div className="source-list">
@@ -543,6 +792,43 @@ export default function Home() {
                       </span>
                     </Link>
                   ))}
+                </div>
+                <div className="answer-feedback">
+                  <div>
+                    <strong>Câu trả lời này có hữu ích không?</strong>
+                    <p>Phản hồi giúp nhóm cải thiện resolver trước demo.</p>
+                  </div>
+                  <div className="feedback-actions">
+                    <button
+                      className={
+                        answerFeedback === "helpful" ? "feedback-selected" : ""
+                      }
+                      onClick={() => setAnswerFeedback("helpful")}
+                      type="button"
+                      aria-pressed={answerFeedback === "helpful"}
+                    >
+                      👍 Hữu ích
+                    </button>
+                    <button
+                      className={
+                        answerFeedback === "incorrect"
+                          ? "feedback-selected feedback-negative"
+                          : ""
+                      }
+                      onClick={() => setAnswerFeedback("incorrect")}
+                      type="button"
+                      aria-pressed={answerFeedback === "incorrect"}
+                    >
+                      👎 Chưa đúng
+                    </button>
+                  </div>
+                  {answerFeedback && (
+                    <small className="feedback-confirmation" aria-live="polite">
+                      {answerFeedback === "helpful"
+                        ? "Đã ghi nhận · cảm ơn bạn."
+                        : "Đã ghi nhận · bạn có thể chuyển TA để được kiểm tra thêm."}
+                    </small>
+                  )}
                 </div>
                 <div className="result-actions">
                   <button className="primary-action" onClick={resetFlow}>

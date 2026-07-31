@@ -410,7 +410,8 @@ export async function resolveQuestion(question: string): Promise<ResolverRespons
       apiKey: liveApiKey,
       topK: 5,
     });
-  } catch {
+  } catch (error) {
+    console.error("[resolver] discussion retrieval failed", error);
     return {
       status: "escalated",
       understoodAs: "Không thể truy xuất nguồn học tập lúc này",
