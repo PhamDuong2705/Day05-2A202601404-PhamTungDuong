@@ -1,6 +1,6 @@
 {
   "dataset": "discord-resolver-synthetic-cp3-v1",
-  "description": "Dữ liệu mô phỏng đã được tạo riêng cho prototype CP3, không chứa lịch sử Discord thật.",
+  "description": "Dữ liệu MÔ PHỎNG đã được tạo riêng cho prototype CP3, không chứa lịch sử Discord thật.",
   "threads": [
     {
       "thread_id": "TH001",
