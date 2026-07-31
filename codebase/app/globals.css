@@ -380,6 +380,7 @@ button {
 .message-list {
   min-height: 0;
   overflow-y: auto;
+  scroll-behavior: smooth;
   padding: 8px 20px 20px;
 }
 
@@ -424,6 +425,66 @@ button {
 .message-selected {
   background: #f3f4ff;
   border-color: #dfe2ff;
+}
+
+.indexed-thread {
+  margin-top: 12px;
+}
+
+.indexed-thread-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 4px 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: #8a92a2;
+}
+
+.indexed-thread-divider > span {
+  color: var(--discord);
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.indexed-thread-divider > strong {
+  overflow: hidden;
+  color: #697286;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.indexed-thread-divider > small {
+  margin-left: auto;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: #eceef3;
+  font-size: 7px;
+}
+
+.indexed-message {
+  scroll-margin-block: 22px;
+}
+
+.indexed-message .message-meta code {
+  margin-left: auto;
+  color: #a0a6b2;
+  font-size: 8px;
+}
+
+.indexed-message:target {
+  border-color: #929aff;
+  background: #f0f1ff;
+  box-shadow:
+    0 0 0 3px rgb(88 101 242 / 12%),
+    0 12px 30px rgb(88 101 242 / 10%);
+  animation: source-arrival 900ms ease-out;
+}
+
+.indexed-message:target .target-label {
+  display: block;
 }
 
 .member-avatar,

@@ -48,7 +48,7 @@ test("server-renders the Discord Question Resolver prototype", async () => {
   assert.doesNotMatch(html, /react-loading-skeleton/);
 });
 
-test("renders the indexed discussion history with message anchors", async () => {
+test("renders the scrollable channel history with message anchors", async () => {
   const response = await workerFetch(
     new Request("http://localhost/hoi-dap-day2", {
       headers: { accept: "text/html" },
@@ -56,7 +56,7 @@ test("renders the indexed discussion history with message anchors", async () => 
   );
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Các thảo luận học tập trước đó/);
+  assert.match(html, /Lịch sử thảo luận đã được index/);
   assert.match(html, /id="M002"/);
   assert.match(html, /NGUỒN AI ĐÃ CHỌN/);
   assert.match(html, /Question Resolver/);

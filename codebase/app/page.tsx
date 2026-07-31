@@ -2,6 +2,11 @@
 
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import corpus from "../data/discussions.json";
+import type {
+  DiscussionMessage,
+  DiscussionThread,
+} from "../lib/contracts";
 
 type FlowStatus =
   | "idle"
@@ -58,36 +63,46 @@ type Question = {
   reactions?: string;
 };
 
-const questions: Question[] = [
-  {
-    id: "q-rag",
-    author: "Minh Anh",
-    initials: "MA",
-    color: "#f59e0b",
-    time: "09:42",
-    content:
-      "Em đang phân vân: RAG khác fine-tuning ở điểm nào? Với chatbot hỏi đáp tài liệu thì nên chọn gì ạ?",
-    reactions: "2",
-  },
-  {
-    id: "q-temperature",
-    author: "Quốc Bảo",
-    initials: "QB",
-    color: "#10b981",
-    time: "09:47",
-    content:
-      "Tại sao để temperature thấp mà model vẫn hallucinate? Có thread nào giải thích phần này không ạ?",
-  },
-  {
-    id: "q-attention",
-    author: "Lan Chi",
-    initials: "LC",
-    color: "#ec4899",
-    time: "09:55",
-    content:
-      "Em bị lỗi shape mismatch ở bài attention, thử reshape rồi mà vẫn lỗi. Mọi người biết nguyên nhân không?",
-  },
+const indexedThreads = (corpus.threads as DiscussionThread[]).filter(
+  (thread) => thread.scope === "learning",
+);
+
+const avatarColors = [
+  "#f59e0b",
+  "#10b981",
+  "#ec4899",
+  "#5865f2",
+  "#8b5cf6",
+  "#0ea5e9",
 ];
+
+function questionFromMessage(message: DiscussionMessage): Question {
+  const checksum = [...message.message_id].reduce(
+    (sum, character) => sum + character.charCodeAt(0),
+    0,
+  );
+  return {
+    id: message.message_id,
+    author: message.author,
+    initials: message.author
+      .split(/\s+/)
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toLocaleUpperCase("vi"),
+    color: avatarColors[checksum % avatarColors.length],
+    time: new Intl.DateTimeFormat("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Asia/Bangkok",
+    }).format(new Date(message.created_at)),
+    content: message.content,
+  };
+}
+
+const firstIndexedQuestion = questionFromMessage(
+  indexedThreads[0].messages.find((message) => message.author_role === "student")!,
+);
 
 const flowSteps = [
   { label: "Hiểu câu hỏi", detail: "Chuẩn hoá ý định học tập" },
@@ -100,8 +115,9 @@ const delay = (ms: number) =>
   new Promise((resolve) => window.setTimeout(resolve, ms));
 
 export default function Home() {
-  const [selectedQuestion, setSelectedQuestion] = useState<Question>(questions[0]);
-  const [query, setQuery] = useState(`/ask ${questions[0].content}`);
+  const [selectedQuestion, setSelectedQuestion] =
+    useState<Question>(firstIndexedQuestion);
+  const [query, setQuery] = useState(`/ask ${firstIndexedQuestion.content}`);
   const [status, setStatus] = useState<FlowStatus>("idle");
   const [activeStep, setActiveStep] = useState(-1);
   const [result, setResult] = useState<ResolverResult | null>(null);
@@ -283,7 +299,9 @@ export default function Home() {
         </div>
 
         <div className="message-list">
-          <div className="date-divider"><span>Hôm nay, 30 tháng 7</span></div>
+          <div className="date-divider">
+            <span>Lịch sử thảo luận đã được index</span>
+          </div>
           <article className="message system-message">
             <div className="bot-avatar">QR</div>
             <div className="message-body">
@@ -299,40 +317,67 @@ export default function Home() {
             </div>
           </article>
 
-          {questions.map((question) => (
-            <article
-              className={`message question-message ${
-                selectedQuestion.id === question.id ? "message-selected" : ""
-              }`}
-              key={question.id}
-            >
-              <div
-                className="member-avatar"
-                style={{ backgroundColor: question.color }}
-                aria-hidden="true"
-              >
-                {question.initials}
+          {indexedThreads.map((thread) => (
+            <section className="indexed-thread" key={thread.thread_id}>
+              <div className="indexed-thread-divider">
+                <span>#{thread.channel}</span>
+                <strong>{thread.topic.replaceAll("-", " ")}</strong>
+                <small>{thread.thread_id}</small>
               </div>
-              <div className="message-body">
-                <div className="message-meta">
-                  <strong>{question.author}</strong>
-                  <time>{question.time}</time>
-                </div>
-                <p>{question.content}</p>
-                <div className="message-tools">
-                  {question.reactions && (
-                    <span className="reaction">🤔 {question.reactions}</span>
-                  )}
-                  <button
-                    onClick={() => chooseQuestion(question)}
-                    aria-pressed={selectedQuestion.id === question.id}
+              {thread.messages.map((message) => {
+                const question = questionFromMessage(message);
+                const canAsk = message.author_role === "student";
+                return (
+                  <article
+                    className={`message indexed-message role-${message.author_role} ${
+                      selectedQuestion.id === message.message_id
+                        ? "message-selected"
+                        : ""
+                    }`}
+                    id={message.message_id}
+                    key={message.message_id}
+                    tabIndex={-1}
                   >
-                    {selectedQuestion.id === question.id ? "Đã chọn" : "Hỏi AI"}
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-            </article>
+                    <div
+                      className="member-avatar"
+                      style={{ backgroundColor: question.color }}
+                      aria-hidden="true"
+                    >
+                      {question.initials}
+                    </div>
+                    <div className="message-body">
+                      <div className="message-meta">
+                        <strong>{message.author}</strong>
+                        {!canAsk && (
+                          <span className="app-tag">
+                            {message.author_role === "ta" ? "TA" : "STAFF"}
+                          </span>
+                        )}
+                        <time>{question.time}</time>
+                        <code>{message.message_id}</code>
+                      </div>
+                      <p>{message.content}</p>
+                      {canAsk && (
+                        <div className="message-tools">
+                          <button
+                            onClick={() => chooseQuestion(question)}
+                            aria-pressed={
+                              selectedQuestion.id === message.message_id
+                            }
+                          >
+                            {selectedQuestion.id === message.message_id
+                              ? "Đã chọn"
+                              : "Hỏi AI"}
+                            <span>→</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <span className="target-label">NGUỒN AI ĐÃ CHỌN</span>
+                  </article>
+                );
+              })}
+            </section>
           ))}
         </div>
 
