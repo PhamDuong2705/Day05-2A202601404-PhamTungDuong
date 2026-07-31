@@ -210,7 +210,7 @@ function channelForThread(thread: DiscussionThread): ChannelKey {
 export default function Home() {
   const [selectedQuestion, setSelectedQuestion] =
     useState<Question>(firstIndexedQuestion);
-  const [query, setQuery] = useState(`/ask ${firstIndexedQuestion.content}`);
+  const [query, setQuery] = useState("");
   const [status, setStatus] = useState<FlowStatus>("idle");
   const [activeStep, setActiveStep] = useState(-1);
   const [result, setResult] = useState<ResolverResult | null>(null);
