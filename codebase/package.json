@@ -10,6 +10,8 @@
     "build": "vinext build",
     "start": "vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
+    "eval": "node eval/run-eval.mjs --label=live-cp3",
+    "eval:demo": "node eval/run-eval.mjs --label=demo-after-safety-fixes --output=demo-after-safety-fixes.json --allow-fail",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

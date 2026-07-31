@@ -2,19 +2,27 @@
 
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
 
-type FlowStatus = "idle" | "processing" | "resolved" | "escalated";
+type FlowStatus =
+  | "idle"
+  | "processing"
+  | "resolved"
+  | "clarify"
+  | "escalated"
+  | "out_of_scope";
 
 type Source = {
   id: string;
+  threadId: string;
   channel: string;
   author: string;
   time: string;
   excerpt: string;
   relevance: number;
+  permalink: string;
 };
 
 type ResolverResult = {
-  status: "resolved" | "escalated";
+  status: Exclude<FlowStatus, "idle" | "processing">;
   understoodAs: string;
   answer: string;
   confidence: number;
@@ -22,6 +30,21 @@ type ResolverResult = {
   sources: Source[];
   missing?: string;
   taTicket?: string;
+  clarifyingQuestion?: string;
+  scopeMessage?: string;
+  trace: {
+    mode: "demo" | "live";
+    embeddingModel: string | null;
+    resolverModel: string | null;
+    retrieved: Array<{
+      threadId: string;
+      topic: string;
+      score: number;
+    }>;
+    validatedSourceIds: string[];
+    rejectedSourceIds: string[];
+    latencyMs: number;
+  };
 };
 
 type Question = {
@@ -170,6 +193,14 @@ export default function Home() {
     setResult(null);
     setManualEscalation(false);
     setSelectedSource(null);
+  };
+
+  const answerClarification = () => {
+    const currentQuestion = cleanQuestion;
+    setStatus("idle");
+    setActiveStep(-1);
+    setResult(null);
+    setQuery(`/ask ${currentQuestion} — `);
   };
 
   return (
@@ -333,7 +364,11 @@ export default function Home() {
             <span>✦</span>
             <div>
               <strong>Question Resolver</strong>
-              <p>AI-assisted · Mock backend</p>
+              <p>
+                {result?.trace.mode === "live"
+                  ? "Gemini AI · Semantic retrieval"
+                  : "CP3 · Live khi có API key"}
+              </p>
             </div>
           </div>
           {(status !== "idle" || result) && (
@@ -359,14 +394,18 @@ export default function Home() {
               {status === "idle" && "Sẵn sàng"}
               {status === "processing" && "Đang chạy"}
               {status === "resolved" && "Đủ căn cứ"}
+              {status === "clarify" && "Cần hỏi lại"}
               {status === "escalated" && "Cần TA"}
+              {status === "out_of_scope" && "Ngoài phạm vi"}
             </span>
           </div>
           <ol className="flow-steps">
             {flowSteps.map((step, index) => {
               const complete =
                 status === "resolved" ||
+                status === "clarify" ||
                 status === "escalated" ||
+                status === "out_of_scope" ||
                 (status === "processing" && index < activeStep);
               const active = status === "processing" && index === activeStep;
               return (
@@ -427,6 +466,15 @@ export default function Home() {
                 <small>độ tin cậy</small>
               </div>
             </div>
+            <div className="trace-strip">
+              <span className={`mode-badge mode-${result.trace.mode}`}>
+                {result.trace.mode === "live" ? "AI THẬT" : "DEMO"}
+              </span>
+              <p>
+                {result.trace.retrieved.length} thread đã retrieval ·{" "}
+                {result.trace.latencyMs} ms
+              </p>
+            </div>
 
             {status === "resolved" && !manualEscalation ? (
               <>
@@ -473,6 +521,55 @@ export default function Home() {
                   </button>
                 </div>
               </>
+            ) : status === "clarify" ? (
+              <>
+                <div className="decision decision-clarify">
+                  <span>?</span>
+                  <div>
+                    <strong>Cần thêm một thông tin</strong>
+                    <p>Chưa chọn nguồn để tránh tìm sai chủ đề</p>
+                  </div>
+                </div>
+                <div className="missing-block">
+                  <p className="eyebrow">QUESTION RESOLVER HỎI LẠI</p>
+                  <p>
+                    {result.clarifyingQuestion ??
+                      "Bạn có thể bổ sung bài học hoặc lỗi cụ thể đang hỏi không?"}
+                  </p>
+                  <p className="clarify-reason">{result.missing}</p>
+                </div>
+                <button
+                  className="primary-action full-action"
+                  onClick={answerClarification}
+                >
+                  Bổ sung câu hỏi
+                </button>
+              </>
+            ) : status === "out_of_scope" ? (
+              <>
+                <div className="decision decision-scope">
+                  <span>↩</span>
+                  <div>
+                    <strong>Ngoài phạm vi Question Resolver</strong>
+                    <p>Không dùng kiến thức chung để trả lời thay nguồn Discord</p>
+                  </div>
+                </div>
+                <div className="missing-block">
+                  <p className="eyebrow">PHẠM VI SẢN PHẨM</p>
+                  <p>
+                    {result.scopeMessage ??
+                      "Công cụ chỉ giải quyết câu hỏi học tập từ các kênh được phép."}
+                  </p>
+                  <ul>
+                    <li>Hỏi lại về nội dung học tập</li>
+                    <li>Dùng kênh chính thức cho deadline hoặc điểm số</li>
+                    <li>Dùng trợ lý khác cho câu hỏi kiến thức chung</li>
+                  </ul>
+                </div>
+                <button className="primary-action full-action" onClick={resetFlow}>
+                  Đặt câu hỏi khác
+                </button>
+              </>
             ) : (
               <>
                 <div className="decision decision-escalated">
@@ -506,8 +603,12 @@ export default function Home() {
         )}
 
         <footer className="resolver-footer">
-          <span>Mock</span>
-          <p>CP2: flow bấm được · chưa gọi AI thật</p>
+          <span>{result?.trace.mode === "live" ? "Live" : "Demo"}</span>
+          <p>
+            {result?.trace.mode === "live"
+              ? "CP3: embedding + resolver AI thật"
+              : "Thêm GEMINI_API_KEY để bật CP3 live"}
+          </p>
         </footer>
       </aside>
 

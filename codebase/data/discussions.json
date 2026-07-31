@@ -1,0 +1,642 @@
+{
+  "dataset": "discord-resolver-synthetic-cp3-v1",
+  "description": "Dữ liệu mô phỏng đã được tạo riêng cho prototype CP3, không chứa lịch sử Discord thật.",
+  "threads": [
+    {
+      "thread_id": "TH001",
+      "channel": "hỏi-bài-day-2",
+      "topic": "rag-vs-finetuning",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M002",
+      "messages": [
+        {
+          "message_id": "M001",
+          "author": "Học viên U01",
+          "author_role": "student",
+          "created_at": "2026-07-28T09:12:00+07:00",
+          "content": "RAG khác fine-tuning ở đâu và chatbot hỏi đáp tài liệu nên chọn cách nào?"
+        },
+        {
+          "message_id": "M002",
+          "author": "TA A",
+          "author_role": "ta",
+          "created_at": "2026-07-28T09:20:00+07:00",
+          "content": "RAG lấy kiến thức ngoài tại lúc truy vấn nên phù hợp tài liệu thay đổi và cần citation. Fine-tuning phù hợp hơn khi cần điều chỉnh hành vi, giọng hoặc định dạng ổn định. Với chatbot tài liệu nên thử RAG trước."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH002",
+      "channel": "hỏi-bài-day-1",
+      "topic": "sampling-temperature",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M004",
+      "messages": [
+        {
+          "message_id": "M003",
+          "author": "Học viên U02",
+          "author_role": "student",
+          "created_at": "2026-07-28T10:05:00+07:00",
+          "content": "Temperature thấp mà model vẫn bịa thông tin thì nguyên nhân là gì?"
+        },
+        {
+          "message_id": "M004",
+          "author": "TA B",
+          "author_role": "ta",
+          "created_at": "2026-07-28T10:14:00+07:00",
+          "content": "Sampling temperature thấp chỉ làm đầu ra ít ngẫu nhiên hơn, không bảo đảm factuality. Muốn giảm hallucination cần grounding, nguồn kiểm chứng và đường lui khi không đủ căn cứ."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH003",
+      "channel": "hỏi-bài-day-2",
+      "topic": "rag-chunking",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M006",
+      "messages": [
+        {
+          "message_id": "M005",
+          "author": "Học viên U03",
+          "author_role": "student",
+          "created_at": "2026-07-28T10:30:00+07:00",
+          "content": "Nên chia chunk tài liệu RAG dài bao nhiêu và có cần overlap không?"
+        },
+        {
+          "message_id": "M006",
+          "author": "TA A",
+          "author_role": "ta",
+          "created_at": "2026-07-28T10:41:00+07:00",
+          "content": "Không có kích thước chunk đúng cho mọi tài liệu. Hãy chia theo đơn vị ý nghĩa, thử overlap nhỏ để không mất ngữ cảnh ở ranh giới và đo retrieval recall trên bộ câu hỏi thật."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH004",
+      "channel": "hỏi-bài-day-2",
+      "topic": "embedding-vs-tfidf",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M008",
+      "messages": [
+        {
+          "message_id": "M007",
+          "author": "Học viên U04",
+          "author_role": "student",
+          "created_at": "2026-07-28T11:08:00+07:00",
+          "content": "Embedding khác TF-IDF thế nào khi tìm câu hỏi tương tự?"
+        },
+        {
+          "message_id": "M008",
+          "author": "TA C",
+          "author_role": "ta",
+          "created_at": "2026-07-28T11:16:00+07:00",
+          "content": "TF-IDF mạnh ở từ khoá trùng nhau, còn embedding biểu diễn ngữ nghĩa nên có thể nối các cách diễn đạt khác từ. Embedding vẫn có false positive nên nên rerank và kiểm tra bằng golden set."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH005",
+      "channel": "hỏi-bài-day-2",
+      "topic": "cosine-similarity",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M010",
+      "messages": [
+        {
+          "message_id": "M009",
+          "author": "Học viên U05",
+          "author_role": "student",
+          "created_at": "2026-07-28T11:42:00+07:00",
+          "content": "Cosine similarity trong semantic search được tính như thế nào?"
+        },
+        {
+          "message_id": "M010",
+          "author": "TA C",
+          "author_role": "ta",
+          "created_at": "2026-07-28T11:50:00+07:00",
+          "content": "Cosine similarity lấy tích vô hướng của hai vector chia cho tích độ dài của chúng. Giá trị càng cao thì hướng hai vector càng gần nhau, nhưng ngưỡng phù hợp phải được hiệu chỉnh trên dữ liệu của sản phẩm."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH006",
+      "channel": "hỏi-bài-day-1",
+      "topic": "llm-context-window",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M012",
+      "messages": [
+        {
+          "message_id": "M011",
+          "author": "Học viên U06",
+          "author_role": "student",
+          "created_at": "2026-07-28T13:05:00+07:00",
+          "content": "Context window và giới hạn token có phải cùng một thứ không?"
+        },
+        {
+          "message_id": "M012",
+          "author": "TA B",
+          "author_role": "ta",
+          "created_at": "2026-07-28T13:13:00+07:00",
+          "content": "Context window là tổng lượng token model có thể xem trong một lượt, thường gồm input và phần output được dành chỗ. Giới hạn cụ thể phụ thuộc model và endpoint đang dùng."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH007",
+      "channel": "an-toàn-ai",
+      "topic": "prompt-injection",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M014",
+      "messages": [
+        {
+          "message_id": "M013",
+          "author": "Học viên U07",
+          "author_role": "student",
+          "created_at": "2026-07-28T13:34:00+07:00",
+          "content": "Prompt injection trong hệ thống RAG nguy hiểm ở điểm nào?"
+        },
+        {
+          "message_id": "M014",
+          "author": "TA D",
+          "author_role": "ta",
+          "created_at": "2026-07-28T13:44:00+07:00",
+          "content": "Tài liệu được retrieval có thể chứa chỉ dẫn độc hại khiến model bỏ qua quy tắc hệ thống hoặc làm lộ dữ liệu. Cần phân quyền nguồn, tách dữ liệu khỏi instruction và validate hành động ở backend."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH008",
+      "channel": "hỏi-bài-foundation",
+      "topic": "attention-qkv",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M016",
+      "messages": [
+        {
+          "message_id": "M015",
+          "author": "Học viên U08",
+          "author_role": "student",
+          "created_at": "2026-07-28T14:02:00+07:00",
+          "content": "Query, Key và Value trong attention có vai trò gì?"
+        },
+        {
+          "message_id": "M016",
+          "author": "TA B",
+          "author_role": "ta",
+          "created_at": "2026-07-28T14:12:00+07:00",
+          "content": "Query biểu diễn thứ vị trí hiện tại đang tìm, Key biểu diễn tín hiệu để so khớp, còn Value là nội dung được tổng hợp theo trọng số attention sau khi so Query với Key."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH009",
+      "channel": "machine-learning",
+      "topic": "overfitting",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M018",
+      "messages": [
+        {
+          "message_id": "M017",
+          "author": "Học viên U09",
+          "author_role": "student",
+          "created_at": "2026-07-28T14:35:00+07:00",
+          "content": "Train accuracy cao nhưng validation thấp có phải overfitting không?"
+        },
+        {
+          "message_id": "M018",
+          "author": "TA E",
+          "author_role": "ta",
+          "created_at": "2026-07-28T14:45:00+07:00",
+          "content": "Khoảng cách lớn giữa train và validation là một tín hiệu overfitting. Cần kiểm tra cách chia dữ liệu, leakage, learning curve và thử regularization thay vì kết luận chỉ từ một con số."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH010",
+      "channel": "machine-learning",
+      "topic": "precision-recall",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M020",
+      "messages": [
+        {
+          "message_id": "M019",
+          "author": "Học viên U10",
+          "author_role": "student",
+          "created_at": "2026-07-28T15:03:00+07:00",
+          "content": "Khi nào nên ưu tiên precision và khi nào ưu tiên recall?"
+        },
+        {
+          "message_id": "M020",
+          "author": "TA E",
+          "author_role": "ta",
+          "created_at": "2026-07-28T15:12:00+07:00",
+          "content": "Ưu tiên precision khi false positive gây hậu quả lớn, ví dụ chặn nhầm người dùng. Ưu tiên recall khi bỏ sót positive nguy hiểm hơn, ví dụ sàng lọc ban đầu một bệnh nghiêm trọng."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH011",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "api-key-env",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M022",
+      "messages": [
+        {
+          "message_id": "M021",
+          "author": "Học viên U11",
+          "author_role": "student",
+          "created_at": "2026-07-28T15:32:00+07:00",
+          "content": "API key nên để ở đâu để không bị lộ khi push Git?"
+        },
+        {
+          "message_id": "M022",
+          "author": "TA F",
+          "author_role": "ta",
+          "created_at": "2026-07-28T15:39:00+07:00",
+          "content": "Đặt key trong biến môi trường hoặc file .env.local đã được gitignore. Chỉ commit .env.example với tên biến rỗng, không đưa key vào frontend hoặc source code."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH012",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "javascript-async",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/learning/M024",
+      "messages": [
+        {
+          "message_id": "M023",
+          "author": "Học viên U12",
+          "author_role": "student",
+          "created_at": "2026-07-28T16:04:00+07:00",
+          "content": "Vì sao console.log chạy trước kết quả fetch dù em đặt nó bên dưới?"
+        },
+        {
+          "message_id": "M024",
+          "author": "Học viên U13",
+          "author_role": "student",
+          "created_at": "2026-07-28T16:10:00+07:00",
+          "content": "Fetch trả Promise nên code không tự chờ. Đặt log sau await trong hàm async hoặc xử lý trong then thì mới có response."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH013",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "python-venv",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M026",
+      "messages": [
+        {
+          "message_id": "M025",
+          "author": "Học viên U14",
+          "author_role": "student",
+          "created_at": "2026-07-28T16:25:00+07:00",
+          "content": "Clone project Python về rồi tạo virtual environment như thế nào?"
+        },
+        {
+          "message_id": "M026",
+          "author": "TA F",
+          "author_role": "ta",
+          "created_at": "2026-07-28T16:31:00+07:00",
+          "content": "Dùng python -m venv .venv, kích hoạt môi trường theo hệ điều hành rồi cài dependency từ requirements.txt. Không commit thư mục .venv."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH014",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "git-merge-conflict",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M028",
+      "messages": [
+        {
+          "message_id": "M027",
+          "author": "Học viên U15",
+          "author_role": "student",
+          "created_at": "2026-07-28T16:52:00+07:00",
+          "content": "Git báo merge conflict thì xử lý theo thứ tự nào?"
+        },
+        {
+          "message_id": "M028",
+          "author": "TA F",
+          "author_role": "ta",
+          "created_at": "2026-07-28T17:00:00+07:00",
+          "content": "Mở từng file conflict, chọn hoặc kết hợp nội dung đúng, xoá marker, chạy test rồi git add và commit. Không dùng reset hard nếu chưa hiểu dữ liệu nào sẽ mất."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH015",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "api-rate-limit",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M030",
+      "messages": [
+        {
+          "message_id": "M029",
+          "author": "Học viên U16",
+          "author_role": "student",
+          "created_at": "2026-07-28T17:15:00+07:00",
+          "content": "Gọi model bị lỗi 429 rate limit thì nên xử lý sao?"
+        },
+        {
+          "message_id": "M030",
+          "author": "TA G",
+          "author_role": "ta",
+          "created_at": "2026-07-28T17:22:00+07:00",
+          "content": "Tôn trọng retry-after, dùng exponential backoff có jitter, giới hạn concurrency và cache kết quả phù hợp. Không retry liên tục vì sẽ làm tình trạng rate limit nặng hơn."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH016",
+      "channel": "hỏi-bài-day-2",
+      "topic": "structured-json",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M032",
+      "messages": [
+        {
+          "message_id": "M031",
+          "author": "Học viên U17",
+          "author_role": "student",
+          "created_at": "2026-07-28T17:35:00+07:00",
+          "content": "Làm sao bắt LLM trả JSON ổn định để backend đọc được?"
+        },
+        {
+          "message_id": "M032",
+          "author": "TA G",
+          "author_role": "ta",
+          "created_at": "2026-07-28T17:43:00+07:00",
+          "content": "Dùng structured output hoặc response schema của provider, sau đó vẫn validate kiểu dữ liệu và business rule ở backend. JSON đúng cú pháp chưa chắc đúng ngữ nghĩa."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH017",
+      "channel": "eval-ai",
+      "topic": "golden-set",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M034",
+      "messages": [
+        {
+          "message_id": "M033",
+          "author": "Học viên U18",
+          "author_role": "student",
+          "created_at": "2026-07-28T18:02:00+07:00",
+          "content": "Golden set cho sản phẩm AI nên có những loại case nào?"
+        },
+        {
+          "message_id": "M034",
+          "author": "TA H",
+          "author_role": "ta",
+          "created_at": "2026-07-28T18:10:00+07:00",
+          "content": "Golden set cần case thường, case khó theo taxonomy lỗi, case hiếm và dữ liệu gần thực tế. Chốt tiêu chí pass trước khi chạy và lưu đủ cả kết quả fail."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH018",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "attention-shape-mismatch",
+      "scope": "learning",
+      "resolved": false,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/learning/M036",
+      "messages": [
+        {
+          "message_id": "M035",
+          "author": "Học viên U19",
+          "author_role": "student",
+          "created_at": "2026-07-28T18:31:00+07:00",
+          "content": "Em bị shape mismatch trong bài attention, reshape rồi vẫn lỗi."
+        },
+        {
+          "message_id": "M036",
+          "author": "TA B",
+          "author_role": "ta",
+          "created_at": "2026-07-28T18:35:00+07:00",
+          "content": "Bạn gửi thêm shape của Query, Key, Value, đoạn code phép nhân và stack trace nhé. Hiện chưa đủ thông tin để xác định nguyên nhân."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH019",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "empty-model-response",
+      "scope": "learning",
+      "resolved": false,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M038",
+      "messages": [
+        {
+          "message_id": "M037",
+          "author": "Học viên U20",
+          "author_role": "student",
+          "created_at": "2026-07-28T18:52:00+07:00",
+          "content": "API trả response rỗng nhưng không có error thì em phải kiểm tra gì?"
+        },
+        {
+          "message_id": "M038",
+          "author": "TA G",
+          "author_role": "ta",
+          "created_at": "2026-07-28T19:00:00+07:00",
+          "content": "Cần thêm provider, model, HTTP status và raw response đã che key. Một số provider đặt nội dung ở field khác hoặc chặn output vì safety; chưa đủ dữ liệu để kết luận."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH020",
+      "channel": "hỏi-bài-day-2",
+      "topic": "ambiguous-question",
+      "scope": "learning",
+      "resolved": false,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/learning/M039",
+      "messages": [
+        {
+          "message_id": "M039",
+          "author": "Học viên U21",
+          "author_role": "student",
+          "created_at": "2026-07-28T19:14:00+07:00",
+          "content": "Cái này làm sao vậy mọi người?"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH021",
+      "channel": "thông-báo",
+      "topic": "assignment-deadline",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/logistics/M041",
+      "messages": [
+        {
+          "message_id": "M040",
+          "author": "Học viên U22",
+          "author_role": "student",
+          "created_at": "2026-07-28T19:25:00+07:00",
+          "content": "Deadline nộp bài tuần này là mấy giờ?"
+        },
+        {
+          "message_id": "M041",
+          "author": "Điều phối viên",
+          "author_role": "staff",
+          "created_at": "2026-07-28T19:28:00+07:00",
+          "content": "Thông tin deadline chỉ lấy từ thông báo chính thức của lớp. Question Resolver học tập không được tự diễn giải hoặc thay đổi deadline."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH022",
+      "channel": "trò-chuyện",
+      "topic": "weather",
+      "scope": "off_topic",
+      "resolved": false,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/off-topic/M042",
+      "messages": [
+        {
+          "message_id": "M042",
+          "author": "Học viên U23",
+          "author_role": "student",
+          "created_at": "2026-07-28T19:42:00+07:00",
+          "content": "Mai thời tiết ở Hà Nội có mưa không?"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH023",
+      "channel": "phần-cứng",
+      "topic": "gpu-temperature",
+      "scope": "off_topic",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/off-topic/M044",
+      "messages": [
+        {
+          "message_id": "M043",
+          "author": "Học viên U24",
+          "author_role": "student",
+          "created_at": "2026-07-28T20:01:00+07:00",
+          "content": "Temperature GPU lên cao khi chạy model có đáng lo không?"
+        },
+        {
+          "message_id": "M044",
+          "author": "Học viên U25",
+          "author_role": "student",
+          "created_at": "2026-07-28T20:08:00+07:00",
+          "content": "Theo dõi giới hạn nhiệt của nhà sản xuất, luồng gió và mức throttling. Đây là nhiệt độ phần cứng, không phải sampling temperature của LLM."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH024",
+      "channel": "lỗi-kỹ-thuật",
+      "topic": "react-context",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/demo/learning/M046",
+      "messages": [
+        {
+          "message_id": "M045",
+          "author": "Học viên U26",
+          "author_role": "student",
+          "created_at": "2026-07-28T20:21:00+07:00",
+          "content": "React Context API dùng để làm gì?"
+        },
+        {
+          "message_id": "M046",
+          "author": "Học viên U27",
+          "author_role": "student",
+          "created_at": "2026-07-28T20:27:00+07:00",
+          "content": "React Context truyền state qua cây component mà không phải prop drilling. Nó không liên quan đến context window của mô hình ngôn ngữ."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH025",
+      "channel": "hỏi-bài",
+      "topic": "request-test-answer",
+      "scope": "restricted",
+      "resolved": false,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/restricted/M048",
+      "messages": [
+        {
+          "message_id": "M047",
+          "author": "Học viên U28",
+          "author_role": "student",
+          "created_at": "2026-07-28T20:45:00+07:00",
+          "content": "Cho mình đáp án nguyên bài kiểm tra đang mở với."
+        },
+        {
+          "message_id": "M048",
+          "author": "TA H",
+          "author_role": "ta",
+          "created_at": "2026-07-28T20:47:00+07:00",
+          "content": "Không cung cấp đáp án cho bài kiểm tra đang diễn ra. Bạn có thể hỏi về khái niệm hoặc gửi cách bạn đã suy luận để được gợi ý."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH026",
+      "channel": "hỏi-bài-day-2",
+      "topic": "grounded-citations",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/demo/learning/M050",
+      "messages": [
+        {
+          "message_id": "M049",
+          "author": "Học viên U29",
+          "author_role": "student",
+          "created_at": "2026-07-28T21:03:00+07:00",
+          "content": "Làm sao biết câu trả lời của tutor không tự bịa nguồn?"
+        },
+        {
+          "message_id": "M050",
+          "author": "TA A",
+          "author_role": "ta",
+          "created_at": "2026-07-28T21:11:00+07:00",
+          "content": "Backend phải giới hạn danh sách source ID model được phép trích, kiểm tra ID sau khi model trả về và cho người dùng mở message gốc. Citation tồn tại chưa đủ; nội dung claim cũng phải được nguồn hỗ trợ."
+        }
+      ]
+    }
+  ]
+}
