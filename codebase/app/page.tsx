@@ -430,6 +430,7 @@ export default function Home() {
               activeChannel === "questions" ? "channel-active" : ""
             }`}
             href="/hoi-dap-day2"
+            onClick={() => setActiveChannel("questions")}
             aria-current={activeChannel === "questions" ? "page" : undefined}
           >
             <span>#</span> {channelDetails.questions.label}
