@@ -15,6 +15,10 @@ npm run dev
 
 Mở `http://localhost:3000`.
 
+Trang lịch sử hội thoại: `http://localhost:3000/hoi-dap-day2`. Source card trong
+kết quả `resolved` sẽ mở route này, tự cuộn tới message ID và highlight tin nhắn
+gốc để người dùng kiểm tra ngữ cảnh.
+
 ## Bật AI thật
 
 Copy `.env.example` thành `.env.local`, sau đó điền key ở máy cá nhân:

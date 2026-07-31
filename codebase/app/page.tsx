@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type FlowStatus =
   | "idle"
@@ -105,7 +106,6 @@ export default function Home() {
   const [activeStep, setActiveStep] = useState(-1);
   const [result, setResult] = useState<ResolverResult | null>(null);
   const [scopeOpen, setScopeOpen] = useState(false);
-  const [selectedSource, setSelectedSource] = useState<Source | null>(null);
   const [manualEscalation, setManualEscalation] = useState(false);
   const [error, setError] = useState("");
 
@@ -118,7 +118,6 @@ export default function Home() {
     const closeOnEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
         setScopeOpen(false);
-        setSelectedSource(null);
       }
     };
     window.addEventListener("keydown", closeOnEscape);
@@ -192,7 +191,6 @@ export default function Home() {
     setActiveStep(-1);
     setResult(null);
     setManualEscalation(false);
-    setSelectedSource(null);
   };
 
   const answerClarification = () => {
@@ -235,9 +233,9 @@ export default function Home() {
         <nav aria-label="Kênh Discord">
           <p className="channel-group">KÊNH HỌC TẬP <span>+</span></p>
           <button className="channel-row"><span>#</span> thông-báo</button>
-          <button className="channel-row channel-active">
+          <Link className="channel-row channel-active" href="/hoi-dap-day2">
             <span>#</span> hỏi-bài-day-2
-          </button>
+          </Link>
           <button className="channel-row"><span>#</span> tài-nguyên</button>
           <button className="channel-row"><span>#</span> khoe-bài-làm</button>
 
@@ -249,8 +247,8 @@ export default function Home() {
         <div className="prototype-note">
           <span className="prototype-dot" />
           <div>
-            <strong>Prototype CP2</strong>
-            <p>Dữ liệu và backend mô phỏng</p>
+            <strong>Prototype CP3</strong>
+            <p>Semantic retrieval có kiểm chứng</p>
           </div>
         </div>
       </aside>
@@ -495,10 +493,11 @@ export default function Home() {
                     <span>{result.sources.length} nguồn</span>
                   </div>
                   {result.sources.map((source) => (
-                    <button
+                    <Link
                       className="source-card"
                       key={source.id}
-                      onClick={() => setSelectedSource(source)}
+                      href={`/hoi-dap-day2#${encodeURIComponent(source.id)}`}
+                      aria-label={`Mở tin nhắn nguồn ${source.id} trong lịch sử hội thoại`}
                     >
                       <span className="source-hash">#</span>
                       <span className="source-content">
@@ -507,9 +506,9 @@ export default function Home() {
                         <p>{source.excerpt}</p>
                       </span>
                       <span className="source-score">
-                        {source.relevance}%<small>phù hợp</small>
+                        {source.relevance}%<small>mở nguồn ↗</small>
                       </span>
-                    </button>
+                    </Link>
                   ))}
                 </div>
                 <div className="result-actions">
@@ -628,27 +627,26 @@ export default function Home() {
             >
               ×
             </button>
-            <p className="eyebrow">MỐC CP2</p>
+            <p className="eyebrow">MỐC CP3</p>
             <h2 id="scope-title">Phạm vi prototype</h2>
             <p className="modal-lead">
-              Bản này chứng minh flow chính từ câu hỏi đến một quyết định có căn
-              cứ. Dữ liệu và kết quả được mô phỏng để kiểm tra trải nghiệm.
+              Bản này chứng minh flow từ semantic retrieval đến một quyết định
+              có căn cứ, kèm đường dẫn về đúng tin nhắn nguồn.
             </p>
             <div className="scope-grid">
               <div className="scope-column scope-in">
                 <span>TRONG PHẠM VI</span>
                 <ul>
                   <li>Chọn câu hỏi hoặc nhập lệnh /ask</li>
-                  <li>Mô phỏng tìm và xếp hạng thảo luận</li>
+                  <li>Tìm và xếp hạng thảo luận bằng embedding</li>
                   <li>Tổng hợp câu trả lời kèm nguồn gốc</li>
                   <li>Hai nhánh: đã giải quyết hoặc chuyển TA</li>
                 </ul>
               </div>
               <div className="scope-column scope-out">
-                <span>CHƯA LÀM Ở CP2</span>
+                <span>CHƯA LÀM Ở CP3</span>
                 <ul>
                   <li>Chưa kết nối Discord hoặc đọc tin nhắn thật</li>
-                  <li>Chưa gọi model AI/embedding thật</li>
                   <li>Chưa gửi thông báo thật đến TA</li>
                   <li>Không đọc DM, kênh riêng tư hoặc lưu dữ liệu người dùng</li>
                   <li>Không xử lý điểm số, deadline hay khiếu nại hành chính</li>
@@ -662,55 +660,6 @@ export default function Home() {
         </div>
       )}
 
-      {selectedSource && (
-        <div
-          className="modal-backdrop"
-          role="presentation"
-          onMouseDown={() => setSelectedSource(null)}
-        >
-          <section
-            className="source-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="source-title"
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <button
-              className="modal-close"
-              onClick={() => setSelectedSource(null)}
-              aria-label="Đóng"
-            >
-              ×
-            </button>
-            <p className="eyebrow">TIN NHẮN GỐC · DỮ LIỆU MÔ PHỎNG</p>
-            <h2 id="source-title">#{selectedSource.channel}</h2>
-            <div className="original-message">
-              <div className="member-avatar source-avatar">
-                {selectedSource.author
-                  .split(" ")
-                  .map((word) => word[0])
-                  .join("")
-                  .slice(0, 2)}
-              </div>
-              <div>
-                <strong>{selectedSource.author}</strong>
-                <time>{selectedSource.time}</time>
-                <p>{selectedSource.excerpt}</p>
-              </div>
-            </div>
-            <p className="source-modal-note">
-              Khi kết nối Discord thật, nút nguồn sẽ mở đúng message permalink
-              để học viên tự kiểm tra ngữ cảnh.
-            </p>
-            <button
-              className="primary-action modal-action"
-              onClick={() => setSelectedSource(null)}
-            >
-              ← Quay lại câu trả lời
-            </button>
-          </section>
-        </div>
-      )}
     </main>
   );
 }
