@@ -44,6 +44,8 @@ test("server-renders the Discord Question Resolver prototype", async () => {
   assert.match(html, /Question Resolver/);
   assert.match(html, /Chạy resolver/);
   assert.match(html, /href="\/hoi-dap-day2"/);
+  assert.doesNotMatch(html, /demo-banner/);
+  assert.doesNotMatch(html, /resolver-footer/);
   assert.doesNotMatch(html, /codex-preview/);
   assert.doesNotMatch(html, /react-loading-skeleton/);
 });

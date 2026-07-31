@@ -255,7 +255,7 @@ button {
   height: 100vh;
   min-width: 0;
   display: grid;
-  grid-template-rows: 72px auto 1fr auto;
+  grid-template-rows: 72px minmax(0, 1fr) auto;
   background: #fbfbfd;
   border-right: 1px solid var(--line);
 }
@@ -330,51 +330,6 @@ button {
 
 .scope-button {
   padding: 9px 12px;
-}
-
-.demo-banner {
-  margin: 16px 20px 6px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 15px;
-  border: 1px solid #dfe2ff;
-  border-radius: 13px;
-  background: linear-gradient(135deg, #f0f1ff, #fbfbff 68%);
-}
-
-.sparkle {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--discord);
-  color: white;
-  font-size: 17px;
-}
-
-.demo-banner strong {
-  font-size: 13px;
-}
-
-.demo-banner p {
-  margin: 3px 0 0;
-  color: #646d83;
-  font-size: 11px;
-  line-height: 1.45;
-}
-
-.banner-badge {
-  margin-left: auto;
-  padding: 5px 7px;
-  border-radius: 6px;
-  background: white;
-  color: var(--discord);
-  font-size: 9px;
-  font-weight: 850;
-  letter-spacing: 0.08em;
-  white-space: nowrap;
 }
 
 .message-list {
@@ -1566,31 +1521,6 @@ code {
   font-size: 9px !important;
 }
 
-.resolver-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  margin-top: auto;
-  padding: 12px;
-  color: #9aa1ae;
-  font-size: 8px;
-}
-
-.resolver-footer span {
-  padding: 3px 5px;
-  border-radius: 4px;
-  background: #e5e7ed;
-  color: #777f90;
-  font-size: 7px;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.resolver-footer p {
-  margin: 0;
-}
-
 .modal-backdrop {
   position: fixed;
   z-index: 100;
@@ -1800,7 +1730,7 @@ code {
   }
 
   .conversation-panel {
-    grid-template-rows: 66px auto minmax(500px, 1fr) auto;
+    grid-template-rows: 66px minmax(500px, 1fr) auto;
   }
 
   .resolver-panel {
@@ -1813,14 +1743,6 @@ code {
   }
 
   .channel-heading p {
-    display: none;
-  }
-
-  .demo-banner {
-    margin: 12px 12px 4px;
-  }
-
-  .banner-badge {
     display: none;
   }
 

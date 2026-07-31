@@ -281,22 +281,10 @@ export default function Home() {
           <div className="header-actions">
             <span className="live-pill"><i /> 128 thành viên</span>
             <button className="scope-button" onClick={() => setScopeOpen(true)}>
-              Phạm vi CP2
+              Phạm vi CP3
             </button>
           </div>
         </header>
-
-        <div className="demo-banner">
-          <span className="sparkle">✦</span>
-          <div>
-            <strong>Discord Question Resolver</strong>
-            <p>
-              Chọn một câu hỏi để AI tìm thảo luận tương tự, tổng hợp có nguồn
-              hoặc chuyển TA.
-            </p>
-          </div>
-          <span className="banner-badge">FLOW DEMO</span>
-        </div>
 
         <div className="message-list">
           <div className="date-divider">
@@ -646,14 +634,6 @@ export default function Home() {
           </section>
         )}
 
-        <footer className="resolver-footer">
-          <span>{result?.trace.mode === "live" ? "Live" : "Demo"}</span>
-          <p>
-            {result?.trace.mode === "live"
-              ? "CP3: embedding + resolver AI thật"
-              : "Thêm GEMINI_API_KEY để bật CP3 live"}
-          </p>
-        </footer>
       </aside>
 
       {scopeOpen && (
