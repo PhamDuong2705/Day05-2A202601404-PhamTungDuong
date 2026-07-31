@@ -1620,7 +1620,7 @@ code {
 }
 
 .scope-in li::before {
-  content: "✓";
+  content: "-";
   color: var(--green);
 }
 

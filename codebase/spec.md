@@ -57,7 +57,9 @@ Vì vậy LLM là bộ đề xuất quyết định; backend mới là lớp th�
 
 ## 5. Dữ liệu
 
-`data/discussions.json` là corpus mô phỏng CP3 gồm 26 thread, không phải dữ liệu Discord thật. Nó cố ý chứa:
+`data/discussions.json` là corpus demo CP3 gồm 39 thread: 26 thread mô phỏng ban
+đầu và 13 thread trích từ logs Discord đã ẩn danh. Đây chưa phải luồng đồng bộ
+Discord realtime. Corpus cố ý chứa:
 
 - thread đã và chưa giải quyết;
 - câu hỏi ngoài phạm vi;

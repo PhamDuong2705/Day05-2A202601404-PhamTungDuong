@@ -225,7 +225,7 @@ export default function Home() {
         </button>
         <span className="rail-divider" />
         <button className="guild guild-muted" aria-label="Khoá học khác">
-          K3
+          K4
         </button>
         <button className="guild guild-add" aria-label="Thêm máy chủ">
           +
@@ -248,11 +248,11 @@ export default function Home() {
 
         <nav aria-label="Kênh Discord">
           <p className="channel-group">KÊNH HỌC TẬP <span>+</span></p>
-          <button className="channel-row"><span>#</span> thông-báo</button>
+          <button className="channel-row"><span>#</span> -chung</button>
           <Link className="channel-row channel-active" href="/hoi-dap-day2">
-            <span>#</span> hỏi-bài-day-2
+            <span>#</span> -hỏi-đáp
           </Link>
-          <button className="channel-row"><span>#</span> tài-nguyên</button>
+          <button className="channel-row"><span>#</span> -chia-sẻ</button>
           <button className="channel-row"><span>#</span> khoe-bài-làm</button>
 
           <p className="channel-group channel-gap">HỖ TRỢ <span>+</span></p>
@@ -398,7 +398,7 @@ export default function Home() {
               <p>
                 {result?.trace.mode === "live"
                   ? "Gemini AI · Semantic retrieval"
-                  : "CP3 · Live khi có API key"}
+                  : "CP3 · Live "}
               </p>
             </div>
           </div>
@@ -499,7 +499,7 @@ export default function Home() {
             </div>
             <div className="trace-strip">
               <span className={`mode-badge mode-${result.trace.mode}`}>
-                {result.trace.mode === "live" ? "AI THẬT" : "DEMO"}
+                {result.trace.mode === "live" ? "AI " : "DEMO"}
               </span>
               <p>
                 {result.trace.retrieved.length} thread đã retrieval ·{" "}

@@ -1,6 +1,6 @@
 {
-  "dataset": "discord-resolver-synthetic-cp3-v1",
-  "description": "Dữ liệu MÔ PHỎNG đã được tạo riêng cho prototype CP3, không chứa lịch sử Discord thật.",
+  "dataset": "discord-resolver-demo-cp3-v2",
+  "description": "Dữ liệu demo cho prototype CP3: gồm 26 thread mô phỏng ban đầu và 13 thread được trích từ bộ logs Discord, đã ẩn danh và lược bỏ thông tin nhận dạng. Nội dung chuyên môn, trạng thái xử lý và mốc thời gian được giữ theo nguồn log.",
   "threads": [
     {
       "thread_id": "TH001",
@@ -635,6 +635,380 @@
           "author_role": "ta",
           "created_at": "2026-07-28T21:11:00+07:00",
           "content": "Backend phải giới hạn danh sách source ID model được phép trích, kiểm tra ID sau khi model trả về và cho người dùng mở message gốc. Citation tồn tại chưa đủ; nội dung claim cũng phải được nguồn hỗ trợ."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH027",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "api-key-provider-config",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530865359295484054/1530871957879521440",
+      "messages": [
+        {
+          "message_id": "1530865359295484054",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:12:23.759+07:00",
+          "content": "mình thắc mắc là có cần thống nhất về loại API key để sử dụng k ạ. trong .env có yêu cầu điền api_key  của mình vào vậy khi ng khác vào chạy code của mình và dùng api khác thì chuyện gì sẽ xảy ra ạ. E cảm ơn mn"
+        },
+        {
+          "message_id": "1530865865409691669",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:14:24.426+07:00",
+          "content": "team tự chia sẻ với nhau về các biến môi trường dùng chung như DB, AI api dùng chung cho app,...; còn env không đẩy lên git nên không có xung đột gì"
+        },
+        {
+          "message_id": "1530866524888240280",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:17:01.658+07:00",
+          "content": "Vậy  khi mình làm thì thống nhất về loại API sử dụng ạ. Trong trường hợp tester hoặc khách hàng dùng API khác loại ví dụ bên mình dùng Gemini mà khách hàng có của OpenAI th thì s ạ lúc đấy  cần code sao cho chạy đc cả 2 loại API  hay s ạ"
+        },
+        {
+          "message_id": "1530867043555868732",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:19:05.318+07:00",
+          "content": "Vấn đề khi ship cho khách hàng, nếu bạn cho ng dùng nhập API key cá nhân thì phải có interface làm điều đó và nhập vào env; còn nếu bạn chọn model, dùng API của nhóm và cho người dùng chọn giữa các option model dc cung cấp thì đó là 1 hướng tiếp cận khác. Tùy vào yc ng dùng"
+        },
+        {
+          "message_id": "1530871022054670506",
+          "author": "Lab Coach",
+          "author_role": "ta",
+          "created_at": "2026-07-26T16:34:53.866+07:00",
+          "content": "hãy nhớ bỏ tất cả api key vào .env"
+        },
+        {
+          "message_id": "1530871957879521440",
+          "author": "Điều phối viên",
+          "author_role": "staff",
+          "created_at": "2026-07-26T16:38:36.984+07:00",
+          "content": "lỗi push API key lên hệ thống là rất nguy hiểm, mặc dù repo là private tuy nhiên BTC cũng sẽ quan sát nếu thấy thì cũng sẽ đánh giá đó nhé."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH028",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "ai-log-hook-setup",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530575195788804136/1530611470285672498",
+      "messages": [
+        {
+          "message_id": "1530575195788804136",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-25T20:59:23.388+07:00",
+          "content": "Mình đã tiến hành theo các bước hướng dẫn log ai theo file README, mình sử dụng GEMINI CLI để thử nhưng mình chưa thấy thư mục ai-log có ghi nhận prompt nào của mình cả"
+        },
+        {
+          "message_id": "1530611470285672498",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-25T23:23:31.902+07:00",
+          "content": "có rất nhiều nguyên nhân dẫn tới vấn đề này bạn nha, bạn cần check .gemini/settings.json đúng chưa hay trong script/ nữa. \nmình cũng gặp vấn đề với logging của codex. mình cũng tham khảo qua bài của các bạn nhưng vẫn chưa thể giải quyết triệt để vấn đề nên mình nhờ AI support thì một số hint mình nghĩ là sẽ giúp được các bạn:\n\nĐừng vội sao chép rồi chạy toàn bộ câu lệnh trong README.md. Hãy đọc qua hướng dẫn và cấu trúc dự án trước. Các bạn cũng có thể dùng chính Claude, Codex hoặc công cụ AI đang sử dụng để yêu cầu:\n   “Hãy phân tích cấu trúc template, giải thích cơ chế logging, các bước setup và kiểm tra những vấn đề có thể xảy ra trên Windows.”\nAI có thể kiểm tra cả môi trường máy tính, đường dẫn, phiên bản công cụ và cấu hình liên quan, chứ không chỉ những file có trong Git repository.\n\nHãy đảm bảo terminal đang đứng đúng thư mục dự án. Ví dụ, nếu dự án nằm tại:\nC:\\Users\\username\\Documents\\P-0xx\nthì terminal cũng phải hiển thị:\nPS C:\\Users\\username\\Documents\\P-0xx>it \n\nHãy chú ý sự khác nhau giữa PowerShell, Command Prompt, Git Bash và WSL. Một câu lệnh chạy được trên Linux chưa chắc chạy được trên Windows. Nếu template có launcher riêng như _pyrun.cmd và _pyrun.sh, hãy dùng đúng launcher dành cho hệ điều hành hiện tại.\n\nSau khi sửa cấu hình hook, hãy đóng và mở lại công cụ AI hoặc chạy Developer: ctrl+shift+p -  Reload Window. Nhiều công cụ chỉ đọc hooks khi session hoặc extension được khởi tạo. Một phiên chat được tạo trước khi hook được nạp có thể không ghi log, trong khi các tin nhắn sau khi reload lại hoạt động bình thường.\n\nCuối cùng, hãy kiểm tra theo từng lớp\nCông cụ có tìm thấy cấu hình hook không?\nHook đã được trust hoặc cho phép chạy chưa?\nScript có tìm thấy đúng Python và đúng thư mục dự án không?"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH029",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "rag-mvp-dataset-expansion",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1531307088717021275/1531317737928790199",
+      "messages": [
+        {
+          "message_id": "1531307088717021275",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-27T21:27:40.26+07:00",
+          "content": "Ban đầu mình tính MVP  sẽ dùng bộ data set nhỏ xem có chạy đc tốt không. Sau đó mình bổ sung 1 bộ dataset khác đa dạng và nhiều trường  dữ liệu hơn thì có được  không ạ. Nếu không thì làm như thế nào là chuẩn. E xin cảm ơn mn"
+        },
+        {
+          "message_id": "1531317737928790199",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-27T22:09:59.23+07:00",
+          "content": "câu hỏi của bạn nó chưa có rõ ràng lắm nhưng bạn thử trả lời câu hỏi sau xem sao nha\n- Xác định trước hệ thống RAG sẽ phục vụ loại tài liệu và câu hỏi nào?\n- Chọn một phần nhỏ nhưng có tính đại diện như thế nào để làm MVP?\n- Có thống nhất cách xử lý dữ liệu như cấu trúc chunk, metadata và lưu tài liệu không?\nnếu được bước tiếp theo\n- Chuẩn bị một bộ câu hỏi đánh giá cố định. \n- Sau đó bổ sung thêm dữ liệu, chạy lại đánh giá và điều chỉnh hệ thống nếu cần."
+        },
+        {
+          "message_id": "1531325755189891213",
+          "author": "Học viên D03",
+          "author_role": "student",
+          "created_at": "2026-07-27T22:41:50.694+07:00",
+          "content": "Cách của bạn làm MVP với dataset nhỏ trước là chuẩn bài rồi nhé. Cứ làm vậy để test xem luồng (pipeline) chạy có trơn tru không đã.\n\nSau này muốn đắp thêm bộ data to và nhiều trường (fields) dữ liệu hơn vào hệ thống RAG thì hoàn toàn vô tư, hệ thống này rất linh hoạt. Mấy trường dữ liệu mới bạn chỉ cần nhét nó vào phần Metadata trong Vector Database, hoặc nối thẳng vào nội dung text trước khi đem đi embedding là xử lý được hết."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH030",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "project-requirement-clarification",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1532035068250423457/1532041976432558401",
+      "messages": [
+        {
+          "message_id": "1532035068250423457",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-29T21:40:24.106+07:00",
+          "content": "Dạ, nhóm em còn 1 số vấn đề chưa rõ về yêu cầu của project thì tụi em có thể hỏi ai để có thể xin lời giải thích rõ ràng hơn ạ ? Tụi em đang chọn project RAV-14. Tụi em có thể xin contact stackholders để in giải thích kĩ hơn về requirement không ạ ?"
+        },
+        {
+          "message_id": "1532041976432558401",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-29T22:07:51.145+07:00",
+          "content": "Hãy hỏi trực tiếp mentor trong các buổi Mentor Duty"
+        },
+        {
+          "message_id": "1532072457098362972",
+          "author": "Học viên D03",
+          "author_role": "student",
+          "created_at": "2026-07-30T00:08:58.302+07:00",
+          "content": "Requirements, deps mình nghĩ do team tự quyết định thôi. Mình nghĩ mentor sẽ không yêu cầu bắt buộc sẽ dùng deps nào đâu. Tự quyết định sẽ giúp team linh hoạt hơn trong quá trình build"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH031",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "python-environment-dependencies",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530866238111219825/1530867005396353064",
+      "messages": [
+        {
+          "message_id": "1530866238111219825",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:15:53.285+07:00",
+          "content": "Hiện tại em có vấn đề về setup môi trường cho project nhóm ạ. Em đã thử cài các package trong virtual environment theo các bước đã hướng dẫn ở trong file README.md. Tuy nhiên em bị gặp lỗi do không có file pyproject.toml, chỉ thấy file requirements.txt. Liệu em có thể thay thế phương án cài đặt package được không ạ?"
+        },
+        {
+          "message_id": "1530867005396353064",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:18:56.22+07:00",
+          "content": "bạn thay pip install -e \".[dev]\" thành pip instal -r requirements.txt nha"
+        },
+        {
+          "message_id": "1530867126355755128",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T16:19:25.059+07:00",
+          "content": "vì readme hướng dẫn chạy prj cũ mà prj này được thay đổi cấu trúc r nên lệnh đấy lỗi  đó"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH032",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "github-status-pull-request",
+      "scope": "learning",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530773590046150816/1530774185276870656",
+      "messages": [
+        {
+          "message_id": "1530773590046150816",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-26T10:07:44.265+07:00",
+          "content": "Em chào mn ạ, hiện tại thì em đã làm xong phần clone repo team và làm AI log. Thành viên trong nhóm em mỗi người có 1 branch riêng và em thấy là mỗi nhánh của em không được check status. Acc git hiện tại em đang dùng thuộc organization rồi thì lỗi ở đây là gì ạ. \nMong mn có thể hỗ trợ em."
+        },
+        {
+          "message_id": "1530773992003342416",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T10:09:20.099+07:00",
+          "content": "Bạn đã merge với main branch chưa"
+        },
+        {
+          "message_id": "1530774078422515762",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-26T10:09:40.703+07:00",
+          "content": "chưa ạ"
+        },
+        {
+          "message_id": "1530774185276870656",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-26T10:10:06.179+07:00",
+          "content": "Bạn phải tạo 1 Pull Request sau đó merge với main branch thì mới hoàn thành"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH033",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "onboarding-github-organization",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530091950567460915/1530234368860360725",
+      "messages": [
+        {
+          "message_id": "1530091950567460915",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-24T12:59:08.749+07:00",
+          "content": "Em đã đọc file hướng dẫn onboarding. Tuy nhiên sau khi vào discord server thì em kiểm tra lại và thấy đã được tự động chuyển sang bước tiếp theo là hoàn thiện hồ sơ , trong khi đó em chưa ấn nút để có lời mời vào GitHub Organization. Em đã check hòm thư github và setting/Organization nhưng không có gì. \nEm rất mong được trợ giúp ạ ."
+        },
+        {
+          "message_id": "1530234368860360725",
+          "author": "Điều phối viên",
+          "author_role": "staff",
+          "created_at": "2026-07-24T22:25:03.916+07:00",
+          "content": "Các bạn sẽ được mời vào repo github khi tham gia lập đội nhé"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH034",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "codelabs-wrong-cohort",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530116389426167808/1530120647269941260",
+      "messages": [
+        {
+          "message_id": "1530116389426167808",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-24T14:36:15.427+07:00",
+          "content": "Lúc  sáng em có vào codelabs và đã lỡ chọn nhầm khóa 3, em không tìm được nút đổi lại, em phải liên hệ ai để được đổi lại ạ??."
+        },
+        {
+          "message_id": "1530120647269941260",
+          "author": "Lab Coach",
+          "author_role": "ta",
+          "created_at": "2026-07-24T14:53:10.576+07:00",
+          "content": "Tụi mình đã ghi nhận theo mã học viên của bạn và sẽ đổi lại giúp bạn nhé."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH035",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "mentor-assignment-and-contact",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530222838739636244/1530234492944388157",
+      "messages": [
+        {
+          "message_id": "1530222838739636244",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-24T21:39:14.921+07:00",
+          "content": "Về phần này thì khi nào sẽ chia người hướng dẫn cho các đội và liên hệ với người hướng dẫn kiểu gì ạ. em cảm ơn"
+        },
+        {
+          "message_id": "1530234492944388157",
+          "author": "Lab Coach",
+          "author_role": "ta",
+          "created_at": "2026-07-24T22:25:33.5+07:00",
+          "content": "Sau khi tạo nhóm xong, các mentor sẽ được phân vào nhóm trên discord nhen\nSẽ có một kênh riêng để liên lạc với mentor nhen"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH036",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "attendance-and-late-arrival",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": true,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530005920728350883/1530009198459359442",
+      "messages": [
+        {
+          "message_id": "1530005920728350883",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-24T07:17:17.637+07:00",
+          "content": "Em có thắc mắc ở 2 vấn đề mong BTC giải đáp\n1, Nếu em đến muộn bỏ lỡ mất điểm danh đầu giờ , cuối giờ điểm danh bình thường thì có bị tính vắng và trừ vào số buổi nghỉ cho phép hay không.\n2, Nếu đi muộn vì lý do bất ngờ hoặc bất khả kháng thì sao và được đi muộn tối đa trông khoảng thời gian cố định là bao nhiêu ạ."
+        },
+        {
+          "message_id": "1530009198459359442",
+          "author": "Lab Coach",
+          "author_role": "ta",
+          "created_at": "2026-07-24T07:30:19.109+07:00",
+          "content": "1. Nếu chỉ điểm danh cuối giờ thì sẽ bị tick là không đi học buổi đó. Nhưng bọn mình sẽ duy trì mã điểm danh 1 tiếng sau khi giờ học bắt đầu. Nên bạn cố gắng đi nhé.\n2. Nếu là lý do bất khả kháng thì bạn mail cho btc để phía btc xét duyệt nhá cái này ngoài phạm vi của bọn mình."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH037",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "phase-2-track-information",
+      "scope": "logistics",
+      "resolved": false,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1531916978053320734/1531916978053320734",
+      "messages": [
+        {
+          "message_id": "1531916978053320734",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-29T13:51:09.209+07:00",
+          "content": "Mình đang tìm kiếm thông tin chi tiết về 3 tracks ở phase 2, có bạn nào biết thông tin nằm ở đâu ko chỉ mình với"
+        }
+      ]
+    },
+    {
+      "thread_id": "TH038",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "claude-code-subscription-python-hook",
+      "scope": "learning",
+      "resolved": false,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1530396001112817674/1530396001112817674",
+      "messages": [
+        {
+          "message_id": "1530396001112817674",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-25T09:07:20.048+07:00",
+          "content": "Mục tiêu: Dùng Claude Code (gói Pro) trong VS Code để verify AI logging hook cho project AI20K.\n\nĐã thử:\n1. Cài hook bằng scripts/setup_hooks.ps1 → thành công\n2. Check .env: AI_LOG_SERVER, AI_LOG_API_KEY đều có giá trị thật\n3. Hỏi Claude Code 1 câu trong VS Code để trigger hook và test\n\nKết quả mong đợi vs thực tế: Mong Claude trả lời + tự log vào .ai-log/. Thực tế bị chặn bởi 2 lỗi:\n\nYour organization has disabled Claude subscription access for Claude Code\nUse an Anthropic API key instead, or ask your admin to enable access\n\nUserPromptSubmit hook error: Python was not found; run without arguments to install from the Microsoft Store, or disable this shortcut from Settings > Apps > Advanced app settings > App execution aliases\n\nStack: Windows, VS Code + Claude Code extension, Claude Pro (org: [đã ẩn email]'s Organization)."
+        }
+      ]
+    },
+    {
+      "thread_id": "TH039",
+      "channel": "🙋-hỏi-đáp",
+      "topic": "wrong-project-topic-selection",
+      "scope": "logistics",
+      "resolved": true,
+      "official_answer": false,
+      "permalink": "https://discord.com/channels/1526532830627102781/1531235808906973314/1531237080347185172",
+      "messages": [
+        {
+          "message_id": "1531235808906973314",
+          "author": "Học viên D01",
+          "author_role": "student",
+          "created_at": "2026-07-27T16:44:25.829+07:00",
+          "content": "Mọi người ơi, nhóm e đã thống nhất được đề trong ngân hàng đề nhưng khi chạy lệnh /exam pick thì em lại gõ nhầm mã đề, có cách nào để chọn lại không ạ?"
+        },
+        {
+          "message_id": "1531237080347185172",
+          "author": "Học viên D02",
+          "author_role": "student",
+          "created_at": "2026-07-27T16:49:28.964+07:00",
+          "content": "ông /ticket create ấy"
         }
       ]
     }

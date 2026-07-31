@@ -36,7 +36,8 @@ Không commit `.env.local` hoặc API key.
 
 ## Kiến trúc CP3
 
-1. Backend gom 26 thread mô phỏng trong `data/discussions.json`.
+1. Backend gom 39 thread trong `data/discussions.json`: 26 thread mô phỏng và
+   13 thread trích từ logs Discord đã ẩn danh.
 2. Gemini Embedding 2 mã hoá corpus và câu hỏi.
 3. Retrieval xếp hạng theo `75% semantic + 25% lexical`.
 4. Gemini 3.1 Flash Lite đọc câu hỏi và top 5 thread, trả JSON có schema.
