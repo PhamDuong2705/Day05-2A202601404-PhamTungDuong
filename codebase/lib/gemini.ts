@@ -3,7 +3,7 @@ const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta";
 export const DEFAULT_EMBEDDING_MODEL =
   process.env.GEMINI_EMBEDDING_MODEL ?? "gemini-embedding-2";
 export const DEFAULT_RESOLVER_MODEL =
-  process.env.GEMINI_RESOLVER_MODEL ?? "gemini-3.6-flash";
+  process.env.GEMINI_RESOLVER_MODEL ?? "gemini-3.1-flash-lite";
 
 type EmbeddingResponse = {
   embedding?: { values?: number[] };
@@ -12,12 +12,51 @@ type EmbeddingResponse = {
 
 type InteractionResponse = {
   output_text?: string;
+  steps?: Array<{
+    type?: string;
+    content?: Array<{ type?: string; text?: string }>;
+  }>;
 };
 
-function requireOk(response: Response, action: string) {
-  if (!response.ok) {
-    throw new Error(`${action} failed with HTTP ${response.status}`);
+function retryDelayMs(response: Response, body: string, attempt: number) {
+  const retryAfter = Number.parseFloat(response.headers.get("retry-after") ?? "");
+  if (Number.isFinite(retryAfter) && retryAfter > 0) {
+    return retryAfter * 1_000;
   }
+  const messageDelay = body.match(/retry in ([\d.]+)s/i);
+  if (messageDelay) return Number.parseFloat(messageDelay[1]) * 1_000;
+  return 1_000 * 2 ** attempt;
+}
+
+async function fetchGemini(
+  url: string,
+  init: Omit<RequestInit, "signal">,
+  action: string,
+  timeoutMs: number,
+) {
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const response = await fetch(url, {
+      ...init,
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+    if (response.ok) return response;
+
+    const body = await response.text();
+    const retryable =
+      response.status === 429 || response.status >= 500;
+    if (!retryable || attempt === 3) {
+      throw new Error(`${action} failed with HTTP ${response.status}`);
+    }
+
+    const delay = Math.min(
+      15_000,
+      Math.max(500, retryDelayMs(response, body, attempt)) +
+        Math.round(Math.random() * 500),
+    );
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
+
+  throw new Error(`${action} failed after retries`);
 }
 
 export async function embedOne({
@@ -33,7 +72,7 @@ export async function embedOne({
   title?: string;
   model?: string;
 }) {
-  const response = await fetch(
+  const response = await fetchGemini(
     `${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:embedContent`,
     {
       method: "POST",
@@ -44,16 +83,14 @@ export async function embedOne({
       body: JSON.stringify({
         model: `models/${model}`,
         content: { parts: [{ text }] },
-        embedContentConfig: {
-          taskType,
-          title: taskType === "RETRIEVAL_DOCUMENT" ? title : undefined,
-          outputDimensionality: 768,
-        },
+        taskType,
+        title: taskType === "RETRIEVAL_DOCUMENT" ? title : undefined,
+        outputDimensionality: 768,
       }),
-      signal: AbortSignal.timeout(20_000),
     },
+    "Embedding query",
+    20_000,
   );
-  requireOk(response, "Embedding query");
   const payload = (await response.json()) as EmbeddingResponse;
   const values = payload.embedding?.values;
   if (!values?.length) throw new Error("Embedding response has no vector");
@@ -69,7 +106,7 @@ export async function embedMany({
   documents: Array<{ text: string; title: string }>;
   model?: string;
 }) {
-  const response = await fetch(
+  const response = await fetchGemini(
     `${GEMINI_API_BASE}/models/${encodeURIComponent(model)}:batchEmbedContents`,
     {
       method: "POST",
@@ -81,17 +118,15 @@ export async function embedMany({
         requests: documents.map((document) => ({
           model: `models/${model}`,
           content: { parts: [{ text: document.text }] },
-          embedContentConfig: {
-            taskType: "RETRIEVAL_DOCUMENT",
-            title: document.title,
-            outputDimensionality: 768,
-          },
+          taskType: "RETRIEVAL_DOCUMENT",
+          title: document.title,
+          outputDimensionality: 768,
         })),
       }),
-      signal: AbortSignal.timeout(30_000),
     },
+    "Embedding documents",
+    30_000,
   );
-  requireOk(response, "Embedding documents");
   const payload = (await response.json()) as EmbeddingResponse;
   const vectors = payload.embeddings?.map((item) => item.values ?? []);
   if (
@@ -115,25 +150,34 @@ export async function generateStructuredJson({
   schema: Record<string, unknown>;
   model?: string;
 }) {
-  const response = await fetch(`${GEMINI_API_BASE}/interactions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-goog-api-key": apiKey,
-    },
-    body: JSON.stringify({
-      model,
-      input: prompt,
-      response_format: {
-        type: "text",
-        mime_type: "application/json",
-        schema,
+  const response = await fetchGemini(
+    `${GEMINI_API_BASE}/interactions`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey,
       },
-    }),
-    signal: AbortSignal.timeout(30_000),
-  });
-  requireOk(response, "Resolver generation");
+      body: JSON.stringify({
+        model,
+        input: prompt,
+        response_format: {
+          type: "text",
+          mime_type: "application/json",
+          schema,
+        },
+      }),
+    },
+    "Resolver generation",
+    30_000,
+  );
   const payload = (await response.json()) as InteractionResponse;
-  if (!payload.output_text) throw new Error("Resolver response has no output_text");
-  return JSON.parse(payload.output_text) as unknown;
+  const outputText =
+    payload.output_text ??
+    payload.steps
+      ?.filter((step) => step.type === "model_output")
+      .flatMap((step) => step.content ?? [])
+      .find((item) => item.type === "text" && item.text)?.text;
+  if (!outputText) throw new Error("Resolver response has no text output");
+  return JSON.parse(outputText) as unknown;
 }

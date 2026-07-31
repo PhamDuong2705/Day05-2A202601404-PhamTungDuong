@@ -57,6 +57,7 @@ const decisionCases = [
     name: "clarify",
     question: "Cái này làm sao vậy?",
     expectedStatus: "clarify",
+    expectedRetrieved: 0,
   },
   {
     name: "escalated",
@@ -83,7 +84,10 @@ for (const decisionCase of decisionCases) {
     const payload = await response.json();
     assert.equal(payload.status, decisionCase.expectedStatus);
     assert.equal(payload.trace.mode, "demo");
-    assert.equal(payload.trace.retrieved.length, 5);
+    assert.equal(
+      payload.trace.retrieved.length,
+      decisionCase.expectedRetrieved ?? 5,
+    );
 
     if (payload.status === "resolved") {
       assert.ok(payload.sources.length >= 1);

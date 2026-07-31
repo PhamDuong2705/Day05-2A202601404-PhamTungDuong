@@ -257,6 +257,18 @@ function ticketFor(input: string) {
   return `TA-${String(checksum + 100).padStart(3, "0")}`;
 }
 
+function isClearlyAmbiguous(question: string) {
+  const normalized = question.toLocaleLowerCase("vi").trim();
+  return (
+    normalized.length < 14 ||
+    /^(cái này|cai nay|làm sao|lam sao|giúp với|help)/.test(normalized) ||
+    /(slide này|slide nay|đoạn này|doan nay|nội dung này|noi dung nay)/.test(
+      normalized,
+    ) ||
+    /^(cách xử lý ngữ cảnh|cach xu ly ngu canh)[?.!]*$/.test(normalized)
+  );
+}
+
 function demoModelOutput(
   question: string,
   candidates: RetrievalCandidate[],
@@ -264,14 +276,7 @@ function demoModelOutput(
   const normalized = question.toLocaleLowerCase("vi").trim();
   const top = candidates[0];
 
-  if (
-    normalized.length < 14 ||
-    /^(cái này|cai nay|làm sao|lam sao|giúp với|help)/.test(normalized) ||
-    /(slide này|slide nay|đoạn này|doan nay|nội dung này|noi dung nay)/.test(
-      normalized,
-    ) ||
-    /^(cách xử lý ngữ cảnh|cach xu ly ngu canh)[?.!]*$/.test(normalized)
-  ) {
+  if (isClearlyAmbiguous(question)) {
     return {
       understood_as: "Câu hỏi đang thiếu đối tượng hoặc bối cảnh",
       decision: "clarify",
@@ -374,6 +379,29 @@ export async function resolveQuestion(question: string): Promise<ResolverRespons
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   const forceDemo = process.env.RESOLVER_MODE === "demo";
   const liveApiKey = apiKey && !forceDemo ? apiKey : undefined;
+
+  if (isClearlyAmbiguous(question)) {
+    return {
+      status: "clarify",
+      understoodAs: "Câu hỏi đang thiếu đối tượng hoặc bối cảnh",
+      answer: "",
+      confidence: 0.98,
+      foundCount: 0,
+      sources: [],
+      missing: "Chưa biết người học muốn tóm tắt hoặc giải thích nội dung nào.",
+      clarifyingQuestion:
+        "Bạn muốn hỏi về bài học, đoạn code, slide hoặc lỗi cụ thể nào?",
+      trace: {
+        mode: liveApiKey ? "live" : "demo",
+        embeddingModel: null,
+        resolverModel: null,
+        retrieved: [],
+        validatedSourceIds: [],
+        rejectedSourceIds: [],
+        latencyMs: Date.now() - startedAt,
+      },
+    };
+  }
 
   let retrieval;
   try {

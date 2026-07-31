@@ -22,7 +22,7 @@ Copy `.env.example` thành `.env.local`, sau đó điền key ở máy cá nhân
 ```env
 GEMINI_API_KEY=
 GEMINI_EMBEDDING_MODEL=gemini-embedding-2
-GEMINI_RESOLVER_MODEL=gemini-3.6-flash
+GEMINI_RESOLVER_MODEL=gemini-3.1-flash-lite
 ```
 
 Không commit `.env.local` hoặc API key.
@@ -35,7 +35,7 @@ Không commit `.env.local` hoặc API key.
 1. Backend gom 26 thread mô phỏng trong `data/discussions.json`.
 2. Gemini Embedding 2 mã hoá corpus và câu hỏi.
 3. Retrieval xếp hạng theo `75% semantic + 25% lexical`.
-4. Gemini 3.6 Flash đọc câu hỏi và top 5 thread, trả JSON có schema.
+4. Gemini 3.1 Flash Lite đọc câu hỏi và top 5 thread, trả JSON có schema.
 5. Backend loại source ID không tồn tại và không cho `resolved` khi thiếu nguồn.
 6. UI hiển thị trace, nguồn và bước tiếp theo.
 
@@ -71,9 +71,11 @@ Response có `status`, `sources` và `trace`. Trace ghi mode, model, top thread,
 
 ```bash
 npm test
+npm run eval:demo
+npm run eval
 ```
 
-Test hiện kiểm tra SSR, bốn đường quyết định ở demo mode và giới hạn độ dài input.
+Test kiểm tra SSR, bốn đường quyết định ở demo mode và giới hạn độ dài input. Eval chạy 26 case, gồm 10 case diễn đạt lại từ chatlog ẩn danh và các hard negative. Report live phát hành hiện tại đạt 26/26 tại `eval/runs/live-cp3-2026-07-31T02-40-14-849Z.json`.
 
 ## Phần thật và phần mock
 

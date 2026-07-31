@@ -1,0 +1,1048 @@
+{
+  "run": {
+    "label": "live-cp3",
+    "created_at": "2026-07-31T02:41:33.597Z",
+    "endpoint": "http://localhost:3000/api/resolve",
+    "concurrency": 3,
+    "golden_set": "discord-question-resolver-cp3-golden-v1",
+    "golden_version": 1,
+    "observed_modes": [
+      "live"
+    ]
+  },
+  "summary": {
+    "passed": 26,
+    "failed": 0,
+    "total": 26,
+    "pass_rate": 1,
+    "false_resolved_without_source": 0,
+    "unsafe_false_resolved": 0,
+    "source_integrity_failures": 0,
+    "quality_gate_passed": true,
+    "gate": "pass_rate >= 0.80 AND zero unsafe false-resolved AND zero resolved without valid source AND zero source-integrity failures",
+    "by_group": {
+      "normal": {
+        "passed": 10,
+        "total": 10,
+        "pass_rate": 1
+      },
+      "source_truth": {
+        "passed": 2,
+        "total": 2,
+        "pass_rate": 1
+      },
+      "ambiguous": {
+        "passed": 3,
+        "total": 3,
+        "pass_rate": 1
+      },
+      "out_of_scope": {
+        "passed": 2,
+        "total": 2,
+        "pass_rate": 1
+      },
+      "domain_disambiguation": {
+        "passed": 3,
+        "total": 3,
+        "pass_rate": 1
+      },
+      "rare": {
+        "passed": 6,
+        "total": 6,
+        "pass_rate": 1
+      }
+    }
+  },
+  "results": [
+    {
+      "case_id": "N01",
+      "group": "normal",
+      "question": "Fine-tuning dùng khi nào, còn chatbot hỏi đáp tài liệu thì có nên dùng RAG không?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH001"
+      ],
+      "required_source_ids": [
+        "M002"
+      ],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T1145/M1082",
+      "note": "Diễn đạt lại câu hỏi về fine-tune trong chatlog.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết khi nào nên sử dụng Fine-tuning và liệu chatbot hỏi đáp tài liệu có nên dùng RAG hay không.",
+        "source_ids": [
+          "M002"
+        ],
+        "retrieved_thread_ids": [
+          "TH001",
+          "TH003",
+          "TH004",
+          "TH007",
+          "TH017"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4294
+    },
+    {
+      "case_id": "N02",
+      "group": "normal",
+      "question": "Temperature thấp có ngăn model hallucination hoàn toàn không?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH002"
+      ],
+      "required_source_ids": [
+        "M004"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Câu hỏi cùng nghĩa nhưng không sao chép nguyên văn corpus.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng hỏi liệu việc thiết lập tham số temperature ở mức thấp có loại bỏ hoàn toàn hiện tượng ảo giác (hallucination) ở mô hình ngôn ngữ lớn (LLM) hay không.",
+        "source_ids": [
+          "M004"
+        ],
+        "retrieved_thread_ids": [
+          "TH002",
+          "TH023",
+          "TH006",
+          "TH007",
+          "TH026"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4489
+    },
+    {
+      "case_id": "N03",
+      "group": "normal",
+      "question": "Chia tài liệu thành chunk cho RAG thì chọn kích thước và overlap ra sao?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH003"
+      ],
+      "required_source_ids": [
+        "M006"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Kiểm tra truy hồi câu hỏi diễn đạt lại.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết cách lựa chọn kích thước chunk và độ dài overlap khi chia tài liệu cho hệ thống RAG.",
+        "source_ids": [
+          "M005",
+          "M006"
+        ],
+        "retrieved_thread_ids": [
+          "TH003",
+          "TH001",
+          "TH007",
+          "TH005",
+          "TH016"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4443
+    },
+    {
+      "case_id": "N04",
+      "group": "normal",
+      "question": "Tìm câu hỏi tương tự bằng embedding khác tìm theo TF-IDF như thế nào?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH004"
+      ],
+      "required_source_ids": [
+        "M008"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Kiểm tra semantic retrieval.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết sự khác biệt giữa phương pháp sử dụng embedding so với TF-IDF trong việc tìm kiếm câu hỏi tương tự.",
+        "source_ids": [
+          "M008"
+        ],
+        "retrieved_thread_ids": [
+          "TH004",
+          "TH005",
+          "TH001",
+          "TH003",
+          "TH008"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4396
+    },
+    {
+      "case_id": "N05",
+      "group": "normal",
+      "question": "Cosine similarity của hai vector được tính và diễn giải thế nào?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH005"
+      ],
+      "required_source_ids": [
+        "M010"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Câu hỏi kiến thức trực tiếp.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết cách tính toán và diễn giải ý nghĩa của chỉ số Cosine similarity cho hai vector.",
+        "source_ids": [
+          "M010"
+        ],
+        "retrieved_thread_ids": [
+          "TH005",
+          "TH004",
+          "TH008",
+          "TH010",
+          "TH001"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4077
+    },
+    {
+      "case_id": "N06",
+      "group": "normal",
+      "question": "Train tốt nhưng validation kém có phải mô hình đang overfit không?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH009"
+      ],
+      "required_source_ids": [
+        "M018"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Câu hỏi kiến thức trực tiếp.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người học hỏi liệu việc train accuracy cao và validation accuracy thấp có xác định chắc chắn mô hình đang bị overfitting hay không.",
+        "source_ids": [
+          "M018"
+        ],
+        "retrieved_thread_ids": [
+          "TH009",
+          "TH010",
+          "TH004",
+          "TH003",
+          "TH023"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4584
+    },
+    {
+      "case_id": "N07",
+      "group": "normal",
+      "question": "Sau khi clone dự án Python, em tạo venv và cài dependency thế nào?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH013"
+      ],
+      "required_source_ids": [
+        "M026"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Câu hỏi thao tác kỹ thuật.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Học viên hỏi cách tạo môi trường ảo (venv) và cài đặt các thư viện phụ thuộc (dependencies) sau khi clone dự án Python.",
+        "source_ids": [
+          "M026"
+        ],
+        "retrieved_thread_ids": [
+          "TH013",
+          "TH011",
+          "TH016",
+          "TH012",
+          "TH014"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 6145
+    },
+    {
+      "case_id": "N08",
+      "group": "normal",
+      "question": "API gọi model báo 429 thì retry thế nào để không làm lỗi nặng hơn?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH015"
+      ],
+      "required_source_ids": [
+        "M030"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Câu hỏi thao tác kỹ thuật.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết cách xử lý lỗi API 429 (rate limit) một cách an toàn để tránh làm hệ thống bị quá tải thêm.",
+        "source_ids": [
+          "M030"
+        ],
+        "retrieved_thread_ids": [
+          "TH015",
+          "TH019",
+          "TH002",
+          "TH023",
+          "TH016"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4264
+    },
+    {
+      "case_id": "N09",
+      "group": "normal",
+      "question": "Chỉ prompt 'always respond in JSON' có vấn đề gì, làm sao để backend nhận JSON ổn định?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH016"
+      ],
+      "required_source_ids": [
+        "M032"
+      ],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T1003/M0779",
+      "note": "Diễn đạt lại câu hỏi về JSON format trong chatlog.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng hỏi về rủi ro của việc chỉ sử dụng prompt 'always respond in JSON' và cách để đảm bảo backend nhận được JSON ổn định.",
+        "source_ids": [
+          "M031",
+          "M032"
+        ],
+        "retrieved_thread_ids": [
+          "TH016",
+          "TH019",
+          "TH015",
+          "TH002",
+          "TH026"
+        ],
+        "trace_mode": "live",
+        "confidence": 0.95
+      },
+      "request_error": null,
+      "latency_ms": 6081
+    },
+    {
+      "case_id": "N10",
+      "group": "normal",
+      "question": "Context window của LLM là gì và token đầu vào, đầu ra có tính chung không?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH006"
+      ],
+      "required_source_ids": [
+        "M012"
+      ],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0990/M2294",
+      "note": "Mở rộng câu hỏi 'Context là gì' để đủ ngữ cảnh.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Học viên hỏi về định nghĩa của 'Context window' trong LLM và liệu token đầu vào và đầu ra có được tính gộp chung vào giới hạn này không.",
+        "source_ids": [
+          "M012"
+        ],
+        "retrieved_thread_ids": [
+          "TH006",
+          "TH024",
+          "TH002",
+          "TH016",
+          "TH003"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4378
+    },
+    {
+      "case_id": "S01",
+      "group": "source_truth",
+      "question": "Backend phải làm gì để model không tự bịa message ID khi trích nguồn?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH026"
+      ],
+      "required_source_ids": [
+        "M050"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Mọi kết luận phải dẫn về message thực sự tồn tại.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Cách thức kỹ thuật ở phía backend để ngăn chặn việc LLM tự bịa đặt (hallucination) các message ID khi trích dẫn nguồn.",
+        "source_ids": [
+          "M050"
+        ],
+        "retrieved_thread_ids": [
+          "TH026",
+          "TH002",
+          "TH016",
+          "TH019",
+          "TH007"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 3941
+    },
+    {
+      "case_id": "S02",
+      "group": "source_truth",
+      "question": "API key có được viết thẳng vào frontend rồi push Git không?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH011"
+      ],
+      "required_source_ids": [
+        "M022"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Kiểm tra source ID và nội dung nguồn cùng hỗ trợ kết luận.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng hỏi về việc có nên lưu trực tiếp API key trong mã nguồn frontend và đẩy lên Git hay không.",
+        "source_ids": [
+          "M022"
+        ],
+        "retrieved_thread_ids": [
+          "TH011",
+          "TH014",
+          "TH024",
+          "TH019",
+          "TH012"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4185
+    },
+    {
+      "case_id": "A01",
+      "group": "ambiguous",
+      "question": "Tóm tắt nội dung chính trong slide này.",
+      "expected_status": "clarify",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0649/M1149",
+      "note": "Chatlog thiếu nội dung slide nên resolver phải hỏi lại.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "clarify",
+        "understood_as": "Câu hỏi đang thiếu đối tượng hoặc bối cảnh",
+        "source_ids": [],
+        "retrieved_thread_ids": [],
+        "trace_mode": "live",
+        "confidence": 0.98
+      },
+      "request_error": null,
+      "latency_ms": 80
+    },
+    {
+      "case_id": "A02",
+      "group": "ambiguous",
+      "question": "Tóm tắt.",
+      "expected_status": "clarify",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T1201/M2413",
+      "note": "Không có đối tượng cần tóm tắt.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "clarify",
+        "understood_as": "Câu hỏi đang thiếu đối tượng hoặc bối cảnh",
+        "source_ids": [],
+        "retrieved_thread_ids": [],
+        "trace_mode": "live",
+        "confidence": 0.98
+      },
+      "request_error": null,
+      "latency_ms": 76
+    },
+    {
+      "case_id": "O01",
+      "group": "out_of_scope",
+      "question": "Mai thời tiết ở Hà Nội có mưa không?",
+      "expected_status": "out_of_scope",
+      "expected_thread_ids": [
+        "TH022"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Không dùng kiến thức ngoài để trả lời.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "out_of_scope",
+        "understood_as": "Người dùng hỏi về dự báo thời tiết tại Hà Nội vào ngày mai.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH022",
+          "TH019",
+          "TH023",
+          "TH002",
+          "TH015"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 3514
+    },
+    {
+      "case_id": "O02",
+      "group": "out_of_scope",
+      "question": "Deadline nộp bài tuần này chính xác là mấy giờ?",
+      "expected_status": "out_of_scope",
+      "expected_thread_ids": [
+        "TH021"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Logistics phải quay về thông báo chính thức.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "out_of_scope",
+        "understood_as": "Người dùng hỏi về thời hạn nộp bài (deadline) của tuần này.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH021",
+          "TH020",
+          "TH025",
+          "TH018",
+          "TH006"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4027
+    },
+    {
+      "case_id": "D01",
+      "group": "domain_disambiguation",
+      "question": "GPU temperature lên cao khi train model thì xử lý sao?",
+      "expected_status": "out_of_scope",
+      "expected_thread_ids": [
+        "TH023"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Không nhầm nhiệt phần cứng với sampling temperature.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "out_of_scope",
+        "understood_as": "Người dùng hỏi cách xử lý khi nhiệt độ GPU tăng cao trong quá trình huấn luyện model.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH023",
+          "TH002",
+          "TH015",
+          "TH009",
+          "TH016"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 41084
+    },
+    {
+      "case_id": "D02",
+      "group": "domain_disambiguation",
+      "question": "React Context giúp truyền state qua component như thế nào?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH024"
+      ],
+      "required_source_ids": [
+        "M046"
+      ],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Không nhầm React Context với LLM context window.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Người dùng muốn biết cơ chế hoạt động của React Context trong việc truyền state qua cây component.",
+        "source_ids": [
+          "M046"
+        ],
+        "retrieved_thread_ids": [
+          "TH024",
+          "TH006",
+          "TH011",
+          "TH012",
+          "TH013"
+        ],
+        "trace_mode": "live",
+        "confidence": 0.95
+      },
+      "request_error": null,
+      "latency_ms": 19238
+    },
+    {
+      "case_id": "R01",
+      "group": "rare",
+      "question": "Bài attention của em bị shape mismatch sau reshape, nhưng em chưa gửi code và shape Q K V.",
+      "expected_status": "escalated",
+      "expected_thread_ids": [
+        "TH018"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Đúng chủ đề nhưng thiếu dữ liệu cụ thể, phải chuyển TA.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "escalated",
+        "understood_as": "Người dùng gặp lỗi shape mismatch trong hàm attention nhưng chưa cung cấp thông tin chi tiết về mã nguồn và kích thước dữ liệu (shape) của Q, K, V.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH018",
+          "TH008",
+          "TH019",
+          "TH016",
+          "TH025"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 5558
+    },
+    {
+      "case_id": "R02",
+      "group": "rare",
+      "question": "API model trả response rỗng, em chưa rõ provider, status và raw response.",
+      "expected_status": "escalated",
+      "expected_thread_ids": [
+        "TH019"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Nguồn xác nhận chưa đủ để giải quyết.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "escalated",
+        "understood_as": "Người học đang gặp lỗi API trả về response rỗng và cần hướng dẫn các bước kiểm tra, nhưng chưa cung cấp đủ thông tin về provider, status code và raw response.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH019",
+          "TH016",
+          "TH015",
+          "TH012",
+          "TH011"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4317
+    },
+    {
+      "case_id": "R03",
+      "group": "rare",
+      "question": "Cho mình đáp án toàn bộ bài kiểm tra đang mở.",
+      "expected_status": "out_of_scope",
+      "expected_thread_ids": [
+        "TH025"
+      ],
+      "required_source_ids": [],
+      "origin": "synthetic",
+      "source_ref": null,
+      "note": "Yêu cầu bị giới hạn.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "out_of_scope",
+        "understood_as": "Người dùng yêu cầu cung cấp đáp án cho một bài kiểm tra đang mở.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH025",
+          "TH019",
+          "TH026",
+          "TH020",
+          "TH021"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 3879
+    },
+    {
+      "case_id": "R04",
+      "group": "rare",
+      "question": "Prompt catching là gì?",
+      "expected_status": "escalated",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0444/M2020",
+      "note": "Có thể là typo của prompt caching; không được tự đoán thành prompt injection.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "escalated",
+        "understood_as": "Người dùng đang hỏi về khái niệm 'Prompt catching' trong bối cảnh học tập về AI.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH007",
+          "TH006",
+          "TH012",
+          "TH016",
+          "TH008"
+        ],
+        "trace_mode": "live",
+        "confidence": 0.9
+      },
+      "request_error": null,
+      "latency_ms": 4489
+    },
+    {
+      "case_id": "R05",
+      "group": "rare",
+      "question": "Tool calling là gì và model trao đổi kết quả tool bằng cách nào?",
+      "expected_status": "escalated",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T1087/M1280",
+      "note": "Câu hỏi hợp lệ nhưng corpus CP3 hiện chưa có nguồn tool-calling.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "escalated",
+        "understood_as": "Người dùng muốn tìm hiểu về khái niệm 'tool calling' trong LLM và cách thức mô hình trả về/trao đổi kết quả của tool.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH015",
+          "TH019",
+          "TH006",
+          "TH023",
+          "TH016"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4892
+    },
+    {
+      "case_id": "R06",
+      "group": "rare",
+      "question": "Bạn đang dùng API của provider nào?",
+      "expected_status": "escalated",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0659/M2083",
+      "note": "Không có nguồn trong corpus xác nhận provider của hệ thống lớp.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "escalated",
+        "understood_as": "Người dùng muốn biết hệ thống khóa học đang sử dụng API của nhà cung cấp (provider) nào.",
+        "source_ids": [],
+        "retrieved_thread_ids": [
+          "TH019",
+          "TH011",
+          "TH024",
+          "TH016",
+          "TH015"
+        ],
+        "trace_mode": "live",
+        "confidence": 0.9
+      },
+      "request_error": null,
+      "latency_ms": 4135
+    },
+    {
+      "case_id": "D03",
+      "group": "domain_disambiguation",
+      "question": "Attention mechanism dùng Query, Key và Value để tổng hợp thông tin ra sao?",
+      "expected_status": "resolved",
+      "expected_thread_ids": [
+        "TH008"
+      ],
+      "required_source_ids": [
+        "M016"
+      ],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0984/M0921",
+      "note": "Diễn đạt cụ thể hơn câu hỏi attention mechanism trong chatlog.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "resolved",
+        "understood_as": "Giải thích vai trò của Query, Key và Value trong cơ chế attention để tổng hợp thông tin.",
+        "source_ids": [
+          "M016"
+        ],
+        "retrieved_thread_ids": [
+          "TH008",
+          "TH018",
+          "TH005",
+          "TH002",
+          "TH006"
+        ],
+        "trace_mode": "live",
+        "confidence": 1
+      },
+      "request_error": null,
+      "latency_ms": 4070
+    },
+    {
+      "case_id": "A03",
+      "group": "ambiguous",
+      "question": "Cách xử lý ngữ cảnh.",
+      "expected_status": "clarify",
+      "expected_thread_ids": [],
+      "required_source_ids": [],
+      "origin": "vlearn-chatlog-derived",
+      "source_ref": "T0330/M2400",
+      "note": "Có thể là LLM context, agent context management hoặc ngữ cảnh hội thoại.",
+      "pass": true,
+      "checks": {
+        "http_ok": true,
+        "status_match": true,
+        "retrieval_hit": true,
+        "required_sources_present": true,
+        "source_integrity": true
+      },
+      "actual": {
+        "status": "clarify",
+        "understood_as": "Câu hỏi đang thiếu đối tượng hoặc bối cảnh",
+        "source_ids": [],
+        "retrieved_thread_ids": [],
+        "trace_mode": "live",
+        "confidence": 0.98
+      },
+      "request_error": null,
+      "latency_ms": 36
+    }
+  ]
+}

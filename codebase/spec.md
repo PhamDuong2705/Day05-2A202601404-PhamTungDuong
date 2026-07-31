@@ -108,6 +108,10 @@ Mỗi thay đổi prompt, trọng số retrieval hoặc corpus phải chạy l�
 
 Baseline demo đầu tiên ngày 31/07/2026 đạt 21/26 case nhưng không đạt gate an toàn sau khi review: `A01`, `R04`, `R05`, `A03` bị false-resolved. Nguyên nhân là fallback lexical coi một vài từ chung như “prompt”, “model”, “ngữ cảnh” là đủ căn cứ. Hướng sửa là nhận diện input thiếu tham chiếu, chặn chủ đề chưa có trong corpus và giữ đường lui thay vì tổng hợp thread gần nhất.
 
+Live eval ban đầu phát hiện hai lỗi vận hành: REST embedding đặt config sai tầng và parser Interaction chỉ tìm `output_text`. Sau khi sửa, `gemini-3.6-flash` chạm giới hạn 20 request free-tier; hệ thống được chuyển sang `gemini-3.1-flash-lite` và thêm retry/backoff cho HTTP 429/5xx. Lượt 25/26 còn một false-resolved với câu “Tóm tắt.”, nên backend bổ sung pre-check câu thiếu đối tượng trước retrieval. Golden set và expected output không đổi trong toàn bộ quá trình.
+
+Report live phát hành `eval/runs/live-cp3-2026-07-31T02-40-14-849Z.json` đạt 26/26, `observed_modes: ["live"]`, 0 false-resolved, 0 resolved thiếu nguồn và 0 source-integrity failure.
+
 ## 9. Bằng chứng cần nộp
 
 - ảnh/video bốn trạng thái UI;
@@ -121,7 +125,8 @@ Baseline demo đầu tiên ngày 31/07/2026 đạt 21/26 case nhưng không đ�
 ## 10. Trạng thái hiện tại
 
 - Corpus, hybrid retrieval, resolver schema, validator và UI bốn trạng thái: đã cài đặt.
-- Build/test tích hợp ở demo mode: đã chạy.
-- Golden set và runner: đã tạo.
-- Eval live và review hai người: chờ `GEMINI_API_KEY` và thành viên thứ hai review.
+- Lint, build và test tích hợp demo mode: đã chạy.
+- Golden set 26 case, runner và error analysis: đã tạo.
+- Eval live: đạt quality gate 26/26.
+- Review định tính hai người: còn chờ thành viên thứ hai đối chiếu tối thiểu 5 output resolved.
 - Discord integration thật: ngoài phạm vi CP3.
